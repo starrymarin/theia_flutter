@@ -113,13 +113,27 @@ class TextNode extends Node {
     return _backgroundColor;
   }
 
+  Color? _color;
+  Color? get color {
+    String? colorString = json["color"];
+    _color ??= colorString != null ? HexColor(colorString) : null;
+    return _color;
+  }
+
   @override
   Widget? build() => null;
 
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
-    TextStyle style = textStyle?.copyWith(backgroundColor: backgroundColor)
-        ?? TextStyle(backgroundColor: backgroundColor);
+    TextStyle newStyle = TextStyle(
+        backgroundColor: backgroundColor,
+        color: color
+    );
+    TextStyle style =
+        textStyle?.copyWith(
+            backgroundColor: newStyle.backgroundColor,
+            color: newStyle.color
+        ) ?? newStyle;
     return TextSpan(
       text: text,
       style: style
