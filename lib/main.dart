@@ -1,13 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:theia_flutter/node.dart';
 import 'package:theia_flutter/theia.dart';
 
 void main() {
-  runApp(const TestApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -119,10 +121,14 @@ class _MyHomePageState extends State<MyHomePage> {
   //   );
   // }
 
+
   @override
   Widget build(BuildContext context) {
+    List<dynamic> document = jsonDecode("[{\"children\": [{\"text\": \"222222222\"},{\"text\": \"22222\",\"background-color\": \"#FF0100\"},{\"text\": \"2222222\"},{\"type\": \"inline-code\",\"children\": [{ \"text\": \"a\"}],\"key\": \"mBcTi\"},{\"text\": \"\"}],\"type\": \"paragraph\",\"key\": \"YftEY\"},{\"children\": [{\"text\": \"333333333333333333333\"}],\"type\": \"paragraph\",\"key\": \"cmSDw\"}]");
     return Scaffold(
-      body: Theia(),
+      body: Theia(
+        document: document.map((e) => e as NodeJson).toList(),
+      ),
     );
   }
 }

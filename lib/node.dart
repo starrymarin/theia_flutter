@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:theia_flutter/text_field.dart';
+import 'package:theia_flutter/utils/hex_color.dart';
 
 typedef NodeJson = Map<String, dynamic>;
 
@@ -44,18 +46,14 @@ abstract class Node {
 
   final NodeJson json;
 
-  bool isText();
+  Widget? build();
 
-  bool isBlock();
-
-  bool isInline();
-
-  Widget build();
+  InlineSpan? buildSpan({TextStyle? textStyle});
 }
 
 abstract class ElementNode extends Node {
   ElementNode(super.json) {
-    List<NodeJson> nodeJsonList = json["children"];
+    List<dynamic> nodeJsonList = json["children"];
     for (NodeJson json in nodeJsonList) {
       var node = json.toNode();
       if (node != null) {
@@ -77,9 +75,26 @@ abstract class ElementNode extends Node {
   }
 
   List<Node> children = [];
+}
+
+abstract class BlockNode extends ElementNode {
+  BlockNode(super.json);
 
   @override
-  bool isText() => false;
+  Widget build();
+
+  @override
+  InlineSpan? buildSpan({TextStyle? textStyle}) => null;
+}
+
+abstract class InlineNode extends ElementNode {
+  InlineNode(super.json);
+
+  @override
+  Widget? build() => null;
+
+  @override
+  WidgetSpan buildSpan({TextStyle? textStyle});
 }
 
 class TextNode extends Node {
@@ -91,64 +106,57 @@ class TextNode extends Node {
     return _text ?? "";
   }
 
-  @override
-  bool isText() => true;
+  Color? _backgroundColor;
+  Color? get backgroundColor {
+    String? colorString = json["background-color"];
+    _backgroundColor ??= colorString != null ? HexColor(colorString) : null;
+    return _backgroundColor;
+  }
 
   @override
-  bool isBlock() => false;
+  Widget? build() => null;
 
   @override
-  bool isInline() => false;
-
-  @override
-  Widget build() {
-    return TextField(
-      controller: TextEditingController(text: text),
+  InlineSpan buildSpan({TextStyle? textStyle}) {
+    TextStyle style = textStyle?.copyWith(backgroundColor: backgroundColor)
+        ?? TextStyle(backgroundColor: backgroundColor);
+    return TextSpan(
+      text: text,
+      style: style
     );
   }
 }
 
-class ParagraphNode extends ElementNode {
+class ParagraphNode extends BlockNode {
   ParagraphNode(super.json);
-
-  @override
-  bool isBlock() => true;
-
-  @override
-  bool isInline() => false;
 
   @override
   Widget build() {
     if (children.isNotEmpty == true) {
       var firstChild = children.first;
-      if (firstChild.isBlock()) {
+      if (firstChild is BlockNode) {
         var childrenWidgets = children
             .map((child) => child.build())
+            .whereType<Widget>()
             .toList();
         return Column(
           children: childrenWidgets,
         );
       }
 
-      if (firstChild.isInline() || firstChild.isText()) {
-        return Container();
+      if (firstChild is InlineNode || firstChild is TextNode) {
+        return InlineTextField(elementNode: this);
       }
     }
     return Container();
   }
 }
 
-class InlineCodeNode extends ElementNode {
+class InlineCodeNode extends InlineNode {
   InlineCodeNode(super.json);
 
   @override
-  bool isBlock() => false;
-
-  @override
-  bool isInline() => true;
-
-  @override
-  Widget build() {
-    return Container();
+  WidgetSpan buildSpan({TextStyle? textStyle}) {
+    return WidgetSpan(child: Container());
   }
 }

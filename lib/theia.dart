@@ -8,19 +8,25 @@ import 'package:theia_flutter/node.dart';
 /// 手势到哪一个TextField上面，哪一个TextField处理选区，最后再拼接起来
 
 class Theia extends StatefulWidget {
-  const Theia({Key? key}) : super(key: key);
+  const Theia({
+    Key? key,
+    this.document
+  }) : super(key: key);
+
+  final List<NodeJson>? document;
 
   @override
   State<StatefulWidget> createState() => _TheiaState();
 }
 
 class _TheiaState extends State<Theia> {
-  _TheiaState({
-    List<NodeJson>? document
-  }) : document = document ?? [],
-       super();
+  late List<NodeJson> document;
 
-  List<NodeJson> document;
+  @override
+  void initState() {
+    super.initState();
+    document = widget.document ?? [];
+  }
 
   @override
   Widget build(BuildContext context) {
