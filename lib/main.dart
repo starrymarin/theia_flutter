@@ -121,10 +121,22 @@ class _MyHomePageState extends State<MyHomePage> {
   //   );
   // }
 
+  List<dynamic> document = [];
+
+  @override
+  void initState() {
+    super.initState();
+    DefaultAssetBundle.of(context)
+        .loadString("assets/test.json")
+        .then((value) {
+      setState(() {
+        document = jsonDecode(value);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> document = jsonDecode("[{\"children\": [{\"text\": \"222222222\"},{\"text\": \"22222\",\"background-color\": \"#FF0100\"},{\"text\": \"2222222\"},{\"type\": \"inline-code\",\"children\": [{ \"text\": \"a\"}],\"key\": \"mBcTi\"},{\"text\": \"\"}],\"type\": \"paragraph\",\"key\": \"YftEY\"},{\"children\": [{\"text\": \"333333333333333333333\"}],\"type\": \"paragraph\",\"key\": \"cmSDw\"}]");
     return Scaffold(
       body: Theia(
         document: document.map((e) => e as NodeJson).toList(),

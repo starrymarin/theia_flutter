@@ -31,6 +31,8 @@ class InlineTextFieldState extends State<InlineTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _editingController,
+      keyboardType: TextInputType.multiline,
+      maxLines: null,
     );
   }
 
@@ -67,10 +69,10 @@ class InlineTextEditingController extends TextEditingController {
       TextStyle? style,
       required bool withComposing}) {
     return TextSpan(
-        style: style,
         children: elementNode.children
-            .map((child) => child.buildSpan())
+            .map((child) => child.buildSpan(textStyle: style))
             .whereType<InlineSpan>()
-            .toList(growable: false));
+            .toList(growable: false),
+    );
   }
 }

@@ -20,21 +20,13 @@ class Theia extends StatefulWidget {
 }
 
 class _TheiaState extends State<Theia> {
-  late List<NodeJson> document;
-
-  @override
-  void initState() {
-    super.initState();
-    document = widget.document ?? [];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: document
-          .map((node) => node.toNode()?.build(context))
+      children: widget.document
+          ?.map((node) => node.toNode()?.build(context))
           .whereType<Widget>()
-          .toList(growable: false),
+          .toList(growable: false) ?? [],
     );
   }
 }

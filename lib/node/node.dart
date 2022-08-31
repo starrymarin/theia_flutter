@@ -90,25 +90,13 @@ abstract class InlineNode extends ElementNode {
 class TextNode extends Node {
   TextNode(super.json);
 
-  String? _text;
-  String get text {
-    _text ??= json[node_json.text];
-    return _text ?? "";
-  }
+  String get text => json[node_json.text] ?? "";
 
-  Color? _backgroundColor;
-  Color? get backgroundColor {
-    String? colorString = json[node_json.backgroundColor];
-    _backgroundColor ??= colorString.toColor();
-    return _backgroundColor;
-  }
+  Color? get backgroundColor => json[node_json.backgroundColor]?.toString().toColor();
 
-  Color? _color;
-  Color? get color {
-    String? colorString = json[node_json.color];
-    _color ??= colorString.toColor();
-    return _color;
-  }
+  Color? get color => json[node_json.color]?.toString().toColor();
+
+  double get fontSize => json[node_json.fontSize]?.toDouble() ?? 15;
 
   @override
   Widget? build(BuildContext context) => null;
@@ -116,17 +104,14 @@ class TextNode extends Node {
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
     TextStyle newStyle = TextStyle(
-        backgroundColor: backgroundColor,
-        color: color
+      backgroundColor: backgroundColor,
+      color: color,
+      fontSize: fontSize,
     );
-    TextStyle style =
-        textStyle?.copyWith(
-            backgroundColor: newStyle.backgroundColor,
-            color: newStyle.color
-        ) ?? newStyle;
+    TextStyle style = textStyle?.merge(newStyle) ?? newStyle;
     return TextSpan(
       text: text,
-      style: style
+      style: style,
     );
   }
 }
