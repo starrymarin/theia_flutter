@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:theia_flutter/node.dart';
+import 'package:theia_flutter/node/node.dart';
 
 class InlineTextField extends StatefulWidget {
   const InlineTextField({

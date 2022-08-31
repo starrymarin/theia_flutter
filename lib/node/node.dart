@@ -1,35 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/text_field.dart';
-import 'package:theia_flutter/utils/hex_color.dart';
+import 'package:theia_flutter/utils/color.dart';
+
+import 'package:theia_flutter/node/json_constants.dart' as node_json;
 
 typedef NodeJson = Map<String, dynamic>;
 
-enum NodeType {
-  paragraph,
-  inlineCode,
-}
-
-extension NodeTypeExtension on NodeType {
-  static NodeType? getTypeByName(String name) {
-    switch (name) {
-      case "inline-code":
-        return NodeType.inlineCode;
-      case "paragraph":
-        return NodeType.paragraph;
-    }
-    return null;
-  }
+class NodeType {
+  static const inlineCode = "inline-code";
+  static const paragraph = "paragraph";
 }
 
 extension NodeJsonExtension on NodeJson {
-  bool isText() => containsKey("text");
+  bool isText() => containsKey(node_json.text);
 
   Node? toNode() {
     if (isText()) {
       return TextNode(this);
     } else {
-      var type = NodeTypeExtension.getTypeByName(this["type"]);
-      switch (type) {
+      switch (this[node_json.type]) {
         case NodeType.paragraph:
           return ParagraphNode(this);
         case NodeType.inlineCode:
@@ -38,6 +27,7 @@ extension NodeJsonExtension on NodeJson {
           return null;
       }
     }
+    return null;
   }
 }
 
@@ -46,14 +36,14 @@ abstract class Node {
 
   final NodeJson json;
 
-  Widget? build();
+  Widget? build(BuildContext context);
 
   InlineSpan? buildSpan({TextStyle? textStyle});
 }
 
 abstract class ElementNode extends Node {
   ElementNode(super.json) {
-    List<dynamic> nodeJsonList = json["children"];
+    List<dynamic> nodeJsonList = json[node_json.children];
     for (NodeJson json in nodeJsonList) {
       var node = json.toNode();
       if (node != null) {
@@ -64,13 +54,13 @@ abstract class ElementNode extends Node {
 
   String? _key;
   String? get key {
-    _key ??= json["key"];
+    _key ??= json[node_json.key];
     return _key;
   }
 
-  NodeType? _type;
-  NodeType? get type {
-    _type ??= NodeTypeExtension.getTypeByName(json["type"]);
+  String? _type;
+  String? get type {
+    _type ??= json[node_json.type];
     return _type;
   }
 
@@ -81,7 +71,7 @@ abstract class BlockNode extends ElementNode {
   BlockNode(super.json);
 
   @override
-  Widget build();
+  Widget build(BuildContext context);
 
   @override
   InlineSpan? buildSpan({TextStyle? textStyle}) => null;
@@ -91,7 +81,7 @@ abstract class InlineNode extends ElementNode {
   InlineNode(super.json);
 
   @override
-  Widget? build() => null;
+  Widget? build(BuildContext context) => null;
 
   @override
   WidgetSpan buildSpan({TextStyle? textStyle});
@@ -102,26 +92,26 @@ class TextNode extends Node {
 
   String? _text;
   String get text {
-    _text ??= json["text"];
+    _text ??= json[node_json.text];
     return _text ?? "";
   }
 
   Color? _backgroundColor;
   Color? get backgroundColor {
-    String? colorString = json["background-color"];
-    _backgroundColor ??= colorString != null ? HexColor(colorString) : null;
+    String? colorString = json[node_json.backgroundColor];
+    _backgroundColor ??= colorString.toColor();
     return _backgroundColor;
   }
 
   Color? _color;
   Color? get color {
-    String? colorString = json["color"];
-    _color ??= colorString != null ? HexColor(colorString) : null;
+    String? colorString = json[node_json.color];
+    _color ??= colorString.toColor();
     return _color;
   }
 
   @override
-  Widget? build() => null;
+  Widget? build(BuildContext context) => null;
 
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
@@ -145,12 +135,12 @@ class ParagraphNode extends BlockNode {
   ParagraphNode(super.json);
 
   @override
-  Widget build() {
+  Widget build(BuildContext context) {
     if (children.isNotEmpty == true) {
       var firstChild = children.first;
       if (firstChild is BlockNode) {
         var childrenWidgets = children
-            .map((child) => child.build())
+            .map((child) => child.build(context))
             .whereType<Widget>()
             .toList();
         return Column(
