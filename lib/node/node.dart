@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:theia_flutter/constants.dart';
+import 'package:theia_flutter/node/inline_code_node.dart';
 import 'package:theia_flutter/text_field.dart';
 import 'package:theia_flutter/utils/color.dart';
 
@@ -96,7 +98,7 @@ class TextNode extends Node {
 
   Color? get color => json[node_json.color]?.toString().toColor();
 
-  double get fontSize => json[node_json.fontSize]?.toDouble() ?? 15;
+  double get fontSize => json[node_json.fontSize]?.toDouble() ?? defaultFontSize;
 
   @override
   Widget? build(BuildContext context) => null;
@@ -138,14 +140,5 @@ class ParagraphNode extends BlockNode {
       }
     }
     return Container();
-  }
-}
-
-class InlineCodeNode extends InlineNode {
-  InlineCodeNode(super.json);
-
-  @override
-  WidgetSpan buildSpan({TextStyle? textStyle}) {
-    return WidgetSpan(child: Container());
   }
 }

@@ -16,12 +16,13 @@ class InlineTextField extends StatefulWidget {
 }
 
 class InlineTextFieldState extends State<InlineTextField> {
-  late InlineTextEditingController _editingController;
+  @protected
+  late InlineTextEditingController editingController;
 
   @override
   void initState() {
     super.initState();
-    _editingController = InlineTextEditingController(
+    editingController = InlineTextEditingController(
         widget.elementNode,
         editable: widget.editable
     );
@@ -30,16 +31,19 @@ class InlineTextFieldState extends State<InlineTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: _editingController,
+      controller: editingController,
       keyboardType: TextInputType.multiline,
       maxLines: null,
+      decoration: const InputDecoration(
+        isCollapsed: true
+      ),
     );
   }
 
   @override
   void dispose() {
     super.dispose();
-    _editingController.dispose();
+    editingController.dispose();
   }
 }
 
@@ -47,17 +51,15 @@ class InlineTextEditingController extends TextEditingController {
   InlineTextEditingController(this.elementNode, {
     this.editable = true
   }) {
-    if (editable) {
-      StringBuffer stringBuffer = StringBuffer();
-      for (Node child in elementNode.children) {
-        if (child is InlineNode) {
-          stringBuffer.writeCharCode(PlaceholderSpan.placeholderCodeUnit);
-        } else if (child is TextNode) {
-          stringBuffer.write(child.text);
-        }
+    StringBuffer stringBuffer = StringBuffer();
+    for (Node child in elementNode.children) {
+      if (child is InlineNode) {
+        stringBuffer.writeCharCode(PlaceholderSpan.placeholderCodeUnit);
+      } else if (child is TextNode) {
+        stringBuffer.write(child.text);
       }
-      text = stringBuffer.toString();
     }
+    text = stringBuffer.toString();
   }
 
   final ElementNode elementNode;

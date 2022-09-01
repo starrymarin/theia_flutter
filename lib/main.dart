@@ -9,7 +9,7 @@ import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/theia.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const TestApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -227,19 +227,27 @@ class _TestHomePageState extends State<TestHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          TheiaWidget(
-            child: TextField(
-              key: firstTextFieldKey,
-              controller: EditingController(firstTextFieldKey),
-              selectionControls: _createSelectionControls(context),
+      body: Text.rich(
+        TextSpan(
+          children: [
+            WidgetSpan(
+              child: Container(
+                width: 350,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.orange
+                ),
+              ),
+              alignment: PlaceholderAlignment.top
             ),
-          ),
-          TheiaWidget(
-            child: TextField(),
-          ),
-        ],
+            TextSpan(text: "aaaaaaaaaaaaaaa"),
+            WidgetSpan(
+              child: Container(
+
+              )
+            )
+          ]
+        )
       )
     );
   }
