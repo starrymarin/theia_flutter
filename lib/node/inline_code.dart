@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
+import 'package:theia_flutter/style.dart';
 import 'package:theia_flutter/text_field.dart';
 
 class InlineCodeNode extends InlineNode {
@@ -38,8 +39,12 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
 
   @override
   Widget build(BuildContext context) {
+    const style = TextStyle(
+        fontFamily: monospace,
+        color: Color(0xFF666666)
+    );
     return Container(
-      padding: const EdgeInsets.fromLTRB(4, 4, 2, 4), // 本来left也应该是2，但不知为何TextField右边总是有大约2的padding
+      padding: const EdgeInsets.fromLTRB(4, 4, 2, 6), // 本来left也应该是2，但不知为何TextField右边总是有大约2的padding
       margin: const EdgeInsets.fromLTRB(4, 4, 4, 4),
       decoration: BoxDecoration(
         border: Border.all(
@@ -63,10 +68,7 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
           ),
           maxLines: 1,
           minLines: 1,
-          style: const TextStyle(
-            fontFamily: monospace,
-            color: Color(0xFF666666)
-          ),
+          style: globalTextStyle(context)?.merge(style) ?? style,
         ),
       ),
     );

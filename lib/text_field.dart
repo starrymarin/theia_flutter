@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
+import 'package:theia_flutter/node/text.dart';
+import 'package:theia_flutter/style.dart';
 
 class InlineTextField extends StatefulWidget {
   const InlineTextField({
@@ -35,8 +37,11 @@ class InlineTextFieldState extends State<InlineTextField> {
       keyboardType: TextInputType.multiline,
       maxLines: null,
       decoration: const InputDecoration(
-        isCollapsed: true
+        isCollapsed: true,
+        border: InputBorder.none,
+        focusedBorder: InputBorder.none
       ),
+      style: globalTextStyle(context),
     );
   }
 

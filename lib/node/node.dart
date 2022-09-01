@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:theia_flutter/constants.dart';
-import 'package:theia_flutter/node/inline_code_node.dart';
-import 'package:theia_flutter/text_field.dart';
-import 'package:theia_flutter/utils/color.dart';
+import 'package:theia_flutter/node/block_quote.dart';
+import 'package:theia_flutter/node/inline_code.dart';
+import 'package:theia_flutter/node/paragraph.dart';
+import 'package:theia_flutter/node/text.dart';
 
-import 'package:theia_flutter/node/json_constants.dart' as node_json;
+import 'package:theia_flutter/node/json.dart' as node_json;
 
 typedef NodeJson = Map<String, dynamic>;
 
 class NodeType {
   static const inlineCode = "inline-code";
   static const paragraph = "paragraph";
+  static const blockQuote = "block-quote";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -25,6 +26,8 @@ extension NodeJsonExtension on NodeJson {
           return ParagraphNode(this);
         case NodeType.inlineCode:
           return InlineCodeNode(this);
+        case NodeType.blockQuote:
+          return BlockQuoteNode(this);
         case null:
           return null;
       }
@@ -87,58 +90,4 @@ abstract class InlineNode extends ElementNode {
 
   @override
   WidgetSpan buildSpan({TextStyle? textStyle});
-}
-
-class TextNode extends Node {
-  TextNode(super.json);
-
-  String get text => json[node_json.text] ?? "";
-
-  Color? get backgroundColor => json[node_json.backgroundColor]?.toString().toColor();
-
-  Color? get color => json[node_json.color]?.toString().toColor();
-
-  double get fontSize => json[node_json.fontSize]?.toDouble() ?? defaultFontSize;
-
-  @override
-  Widget? build(BuildContext context) => null;
-
-  @override
-  InlineSpan buildSpan({TextStyle? textStyle}) {
-    TextStyle newStyle = TextStyle(
-      backgroundColor: backgroundColor,
-      color: color,
-      fontSize: fontSize,
-    );
-    TextStyle style = textStyle?.merge(newStyle) ?? newStyle;
-    return TextSpan(
-      text: text,
-      style: style,
-    );
-  }
-}
-
-class ParagraphNode extends BlockNode {
-  ParagraphNode(super.json);
-
-  @override
-  Widget build(BuildContext context) {
-    if (children.isNotEmpty == true) {
-      var firstChild = children.first;
-      if (firstChild is BlockNode) {
-        var childrenWidgets = children
-            .map((child) => child.build(context))
-            .whereType<Widget>()
-            .toList();
-        return Column(
-          children: childrenWidgets,
-        );
-      }
-
-      if (firstChild is InlineNode || firstChild is TextNode) {
-        return InlineTextField(elementNode: this);
-      }
-    }
-    return Container();
-  }
 }

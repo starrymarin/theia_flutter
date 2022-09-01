@@ -9,7 +9,7 @@ import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/theia.dart';
 
 void main() {
-  runApp(const TestApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
