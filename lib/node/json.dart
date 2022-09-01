@@ -5,3 +5,4 @@ const children = "children";
 const backgroundColor = "background-color";
 const color = "color";
 const fontSize = "font-size";
+const indent = "indent";
