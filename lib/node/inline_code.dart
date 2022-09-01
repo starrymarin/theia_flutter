@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/style.dart';
-import 'package:theia_flutter/text_field.dart';
+import 'package:theia_flutter/text.dart';
 import 'package:theia_flutter/theia.dart';
 
 class InlineCodeNode extends InlineNode {

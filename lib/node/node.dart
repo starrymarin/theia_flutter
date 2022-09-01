@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/block_quote.dart';
 import 'package:theia_flutter/node/inline_code.dart';
+import 'package:theia_flutter/node/list.dart';
 import 'package:theia_flutter/node/paragraph.dart';
 import 'package:theia_flutter/node/text.dart';
 
@@ -12,6 +13,8 @@ class NodeType {
   static const inlineCode = "inline-code";
   static const paragraph = "paragraph";
   static const blockQuote = "block-quote";
+  static const numberedList = "numbered-list";
+  static const bulletedList = "bulleted-list";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -28,6 +31,10 @@ extension NodeJsonExtension on NodeJson {
           return InlineCodeNode(this);
         case NodeType.blockQuote:
           return BlockQuoteNode(this);
+        case NodeType.numberedList:
+          return NumberedListNode(this);
+        case NodeType.bulletedList:
+          return BulletedListNode(this);
         case null:
           return null;
       }
