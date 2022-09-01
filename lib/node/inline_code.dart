@@ -3,6 +3,7 @@ import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/style.dart';
 import 'package:theia_flutter/text_field.dart';
+import 'package:theia_flutter/theia.dart';
 
 class InlineCodeNode extends InlineNode {
   InlineCodeNode(super.json);
@@ -21,7 +22,6 @@ class InlineCodeTextField extends InlineTextField {
   const InlineCodeTextField({
     super.key,
     required super.elementNode,
-    super.editable
   });
 
   @override
@@ -69,6 +69,7 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
           maxLines: 1,
           minLines: 1,
           style: globalTextStyle(context)?.merge(style) ?? style,
+          readOnly: theia(context).readOnly,
         ),
       ),
     );

@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/text.dart';
 import 'package:theia_flutter/style.dart';
+import 'package:theia_flutter/theia.dart';
 
 class InlineTextField extends StatefulWidget {
   const InlineTextField({
     Key? key,
     required this.elementNode,
-    this.editable = true
   }) : super(key: key);
 
   final ElementNode elementNode;
-  final bool editable;
 
   @override
   State<StatefulWidget> createState() => InlineTextFieldState();
@@ -24,10 +23,7 @@ class InlineTextFieldState extends State<InlineTextField> {
   @override
   void initState() {
     super.initState();
-    editingController = InlineTextEditingController(
-        widget.elementNode,
-        editable: widget.editable
-    );
+    editingController = InlineTextEditingController(widget.elementNode);
   }
 
   @override
@@ -42,6 +38,7 @@ class InlineTextFieldState extends State<InlineTextField> {
         focusedBorder: InputBorder.none
       ),
       style: globalTextStyle(context),
+      readOnly: theia(context).readOnly,
     );
   }
 
@@ -53,9 +50,7 @@ class InlineTextFieldState extends State<InlineTextField> {
 }
 
 class InlineTextEditingController extends TextEditingController {
-  InlineTextEditingController(this.elementNode, {
-    this.editable = true
-  }) {
+  InlineTextEditingController(this.elementNode) {
     StringBuffer stringBuffer = StringBuffer();
     for (Node child in elementNode.children) {
       if (child is InlineNode) {
@@ -68,7 +63,6 @@ class InlineTextEditingController extends TextEditingController {
   }
 
   final ElementNode elementNode;
-  final bool editable;
 
   @override
   TextSpan buildTextSpan(
