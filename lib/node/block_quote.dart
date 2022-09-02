@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/paragraph.dart';
 import 'package:theia_flutter/text.dart';
+import 'package:theia_flutter/theia.dart';
 
 /// 目前认为block-quote里面只有blockNode，如果出现非BlockNode将会被忽略
 class BlockQuoteNode extends BlockNode {
   BlockQuoteNode(super.json);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, TheiaKey theiaKey) {
     List<Widget> childrenWidgets = [];
     for (var index = 0; index < children.length; index++) {
       var child = children[index];
@@ -20,7 +21,7 @@ class BlockQuoteNode extends BlockNode {
           inlineTextMargin: EdgeInsets.fromLTRB(
               0, 0, 0, index < children.length - 1 ? 8 : 0
           ),
-          child: Builder(builder: (context) => child.build(context)),
+          child: Builder(builder: (context) => child.build(context, theiaKey)),
         )
       );
     }

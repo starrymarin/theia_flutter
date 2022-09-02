@@ -227,27 +227,21 @@ class _TestHomePageState extends State<TestHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text.rich(
-        TextSpan(
-          children: [
-            WidgetSpan(
-              child: Container(
-                width: 350,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.orange
-                ),
-              ),
-              alignment: PlaceholderAlignment.top
-            ),
-            TextSpan(text: "aaaaaaaaaaaaaaa"),
-            WidgetSpan(
-              child: Container(
-
-              )
-            )
-          ]
-        )
+      appBar: AppBar(title: const Text("Test")),
+      body: SelectionArea(
+          child: Column(
+            children: [
+              Text.rich(TextSpan(
+                  children: [
+                    TextSpan(text: " 1234", style: TextStyle(color: Colors.black)),
+                    WidgetSpan(child: Text("abc")),
+                    TextSpan(text: "7890")
+                  ]
+              )),
+              Text("onono nonoojoihoj"),
+              Text(" 649819818918")
+            ],
+          )
       )
     );
   }

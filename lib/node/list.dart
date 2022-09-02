@@ -17,7 +17,7 @@ abstract class ListNode extends BlockNode {
   ListType listType();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, TheiaKey theiaKey) {
     List<Widget> items = [];
     for (var index = 0; index < children.length; index++) {
       final child = children[index];
@@ -28,7 +28,7 @@ abstract class ListNode extends BlockNode {
           ParagraphNodeStyle(
             inlineTextMargin: EdgeInsets.zero,
             child: Builder(builder: (context) {
-              return child.buildByListType(context, index, listType());
+              return child.buildByListType(context, theiaKey, index, listType());
             }),
           )
       );
@@ -60,11 +60,11 @@ class ListItemNode extends BlockNode {
 
   /// use [buildByListType]
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, TheiaKey theiaKey) {
     return Container();
   }
 
-  Widget buildByListType(BuildContext context, int index, ListType listType) {
+  Widget buildByListType(BuildContext context, TheiaKey theiaKey, int index, ListType listType) {
     var label = "";
     var labelStyle = globalTextStyle(context);
     switch (listType) {
@@ -96,7 +96,7 @@ class ListItemNode extends BlockNode {
             children: children
                 .whereType<BlockNode>()
                 .map((child) => Builder(builder: (context) {
-                  return child.build(context);
+                  return child.build(context, theiaKey);
                 }))
                 .toList(),
           ))

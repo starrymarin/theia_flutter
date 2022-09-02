@@ -3,6 +3,7 @@ import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/json.dart' as node_json;
 import 'package:theia_flutter/node/paragraph.dart';
 import 'package:theia_flutter/text.dart';
+import 'package:theia_flutter/theia.dart';
 
 class CheckItemNode extends BlockNode {
   CheckItemNode(super.json);
@@ -10,7 +11,7 @@ class CheckItemNode extends BlockNode {
   bool get checked => json[node_json.checked];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, TheiaKey theiaKey) {
     Icon icon;
     if (checked) {
       icon = const Icon(
@@ -28,7 +29,7 @@ class CheckItemNode extends BlockNode {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
           Container(
@@ -41,7 +42,7 @@ class CheckItemNode extends BlockNode {
           ),
           Expanded(child: Column(
             children: children
-                .map((child) => InlineTextField(elementNode: this))
+                .map((child) => InlineTextField(elementNode: this, theiaKey: theiaKey))
                 .toList(),
           ))
         ],

@@ -7,9 +7,11 @@ class InlineTextField extends StatefulWidget {
   const InlineTextField({
     Key? key,
     required this.elementNode,
+    required this.theiaKey
   }) : super(key: key);
 
   final ElementNode elementNode;
+  final TheiaKey theiaKey;
 
   @override
   State<StatefulWidget> createState() => InlineTextFieldState();
@@ -22,7 +24,7 @@ class InlineTextFieldState extends State<InlineTextField> {
   @override
   void initState() {
     super.initState();
-    editingController = InlineTextEditingController(widget.elementNode);
+    editingController = InlineTextEditingController(widget.elementNode, widget.theiaKey);
   }
 
   @override
@@ -37,7 +39,7 @@ class InlineTextFieldState extends State<InlineTextField> {
         focusedBorder: InputBorder.none
       ),
       style: globalTextStyle(context),
-      readOnly: theia(context).readOnly,
+      readOnly: widget.theiaKey.currentState?.widget.readOnly ?? false,
     );
   }
 
@@ -49,7 +51,7 @@ class InlineTextFieldState extends State<InlineTextField> {
 }
 
 class InlineTextEditingController extends TextEditingController {
-  InlineTextEditingController(this.elementNode) {
+  InlineTextEditingController(this.elementNode, this.theiaKey) {
     StringBuffer stringBuffer = StringBuffer();
     for (Node child in elementNode.children) {
       if (child is InlineNode) {
@@ -62,6 +64,7 @@ class InlineTextEditingController extends TextEditingController {
   }
 
   final ElementNode elementNode;
+  final TheiaKey theiaKey;
 
   @override
   TextSpan buildTextSpan(
@@ -70,7 +73,7 @@ class InlineTextEditingController extends TextEditingController {
       required bool withComposing}) {
     return TextSpan(
         children: elementNode.children
-            .map((child) => child.buildSpan(textStyle: style))
+            .map((child) => child.buildSpan(textStyle: style, theiaKey: theiaKey))
             .whereType<InlineSpan>()
             .toList(growable: false),
     );

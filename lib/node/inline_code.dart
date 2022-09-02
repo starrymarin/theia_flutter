@@ -8,9 +8,9 @@ class InlineCodeNode extends InlineNode {
   InlineCodeNode(super.json);
 
   @override
-  WidgetSpan buildSpan({TextStyle? textStyle}) {
+  WidgetSpan buildSpan({TextStyle? textStyle, required TheiaKey theiaKey}) {
     return WidgetSpan(
-      child: InlineCodeTextField(elementNode: this),
+      child: InlineCodeTextField(elementNode: this, theiaKey: theiaKey),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.baseline
     );
@@ -21,6 +21,7 @@ class InlineCodeTextField extends InlineTextField {
   const InlineCodeTextField({
     super.key,
     required super.elementNode,
+    required super.theiaKey
   });
 
   @override
@@ -68,7 +69,7 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
           maxLines: 1,
           minLines: 1,
           style: globalTextStyle(context)?.merge(style) ?? style,
-          readOnly: theia(context).readOnly,
+          readOnly: widget.theiaKey.currentState?.widget.readOnly ?? false,
         ),
       ),
     );

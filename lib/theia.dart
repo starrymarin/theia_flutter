@@ -9,16 +9,17 @@ import 'package:theia_flutter/text.dart';
 /// 基本思路是将slate的节点一一对应到flutter，所以一个theia widget里面有很多的textField，
 /// 因此在处理选区的时候是首先让flutter处理当前触摸到的TextField的选区，然后通过处理手势，
 /// 手势到哪一个TextField上面，哪一个TextField处理选区，最后再拼接起来
+///
 
-Theia theia(BuildContext context) => context.findAncestorWidgetOfExactType<Theia>()!;
+typedef TheiaKey = GlobalKey<TheiaState>;
 
 class Theia extends StatefulWidget {
-  const Theia({
+  Theia({
     Key? key,
     List<NodeJson>? document,
     this.readOnly = true
   }) : _document = document,
-        super(key: key);
+        super(key: key ?? TheiaKey());
 
   final List<NodeJson>? _document;
   List<NodeJson> get document => _document ??
@@ -36,27 +37,32 @@ class Theia extends StatefulWidget {
   final bool readOnly;
 
   @override
-  State<StatefulWidget> createState() => _TheiaState();
+  State<StatefulWidget> createState() => TheiaState();
 }
 
-class _TheiaState extends State<Theia> {
+class TheiaState extends State<Theia> {
+  TheiaKey get key => widget.key! as TheiaKey;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: GlobalTextStyle(
-            style: const TextStyle(
-              fontSize: defaultFontSize
-            ),
-            child: Column(
-              children: widget.document
-                  .map((nodeJson) => nodeJson.toNode())
-                  .whereType<BlockNode>()
-                  .map((node) => Builder(builder: (context) => node.build(context)))
-                  .whereType<Widget>()
-                  .toList(growable: false),
-            ),
+        child: SelectionArea(
+            child: GlobalTextStyle(
+              style: const TextStyle(
+                  fontSize: defaultFontSize,
+                  height: 1.6
+              ),
+              child: Column(
+                children: widget.document
+                    .map((nodeJson) => nodeJson.toNode())
+                    .whereType<BlockNode>()
+                    .map((node) => Builder(builder: (context) => node.build(context, key)))
+                    .whereType<Widget>()
+                    .toList(growable: false),
+              ),
+            )
         )
       ),
     );
