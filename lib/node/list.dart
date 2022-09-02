@@ -87,8 +87,8 @@ class ListItemNode extends BlockNode {
             alignment: Alignment.topRight,
             width: 30,
             child: IntrinsicWidth(
-              child: Text(label,
-                style: labelStyle
+              child: RichText(
+                text: TextSpan(text: label, style: labelStyle),
               ),
             ),
           ),

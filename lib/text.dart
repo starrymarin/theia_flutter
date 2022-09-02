@@ -29,18 +29,29 @@ class InlineTextFieldState extends State<InlineTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: editingController,
-      keyboardType: TextInputType.multiline,
-      maxLines: null,
-      decoration: const InputDecoration(
-        isCollapsed: true,
-        border: InputBorder.none,
-        focusedBorder: InputBorder.none
-      ),
-      style: globalTextStyle(context),
-      readOnly: widget.theiaKey.currentState?.widget.readOnly ?? false,
-    );
+    final readOnly = widget.theiaKey.currentState?.widget.readOnly ?? false;
+    if (readOnly) {
+      return Container(
+        width: double.infinity,
+        child: Text.rich(
+          editingController.buildTextSpan(context: context, withComposing: false),
+          style: globalTextStyle(context),
+        ),
+      );
+    } else {
+      return TextField(
+        controller: editingController,
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+        decoration: const InputDecoration(
+            isCollapsed: true,
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none
+        ),
+        style: globalTextStyle(context),
+        readOnly: widget.theiaKey.currentState?.widget.readOnly ?? false,
+      );
+    }
   }
 
   @override

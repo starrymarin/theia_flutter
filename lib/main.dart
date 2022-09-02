@@ -138,6 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text("Theia")),
       body: Theia(
         document: document.map((e) => e as NodeJson).toList(),
       ),

@@ -45,26 +45,29 @@ class TheiaState extends State<Theia> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    Widget content = SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: SelectionArea(
-            child: GlobalTextStyle(
-              style: const TextStyle(
-                  fontSize: defaultFontSize,
-                  height: 1.6
-              ),
-              child: Column(
-                children: widget.document
-                    .map((nodeJson) => nodeJson.toNode())
-                    .whereType<BlockNode>()
-                    .map((node) => Builder(builder: (context) => node.build(context, key)))
-                    .whereType<Widget>()
-                    .toList(growable: false),
-              ),
-            )
-        )
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          child: GlobalTextStyle(
+            style: const TextStyle(
+                fontSize: defaultFontSize,
+                color: Color(0xFF333333),
+                height: 1.6
+            ),
+            child: Column(
+              children: widget.document
+                  .map((nodeJson) => nodeJson.toNode())
+                  .whereType<BlockNode>()
+                  .map((node) => Builder(builder: (context) => node.build(context, key)))
+                  .whereType<Widget>()
+                  .toList(growable: false),
+            ),
+          )
       ),
     );
+    if (widget.readOnly) {
+      content = SelectionArea(child: content);
+    }
+    return content;
   }
 }

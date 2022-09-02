@@ -43,6 +43,30 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
         fontFamily: monospace,
         color: Color(0xFF666666)
     );
+    Widget content;
+    final readOnly = widget.theiaKey.currentState?.widget.readOnly ?? false;
+    if (readOnly) {
+      content = Text.rich(
+        editingController.buildTextSpan(context: context, withComposing: false),
+        style: globalTextStyle(context)?.merge(style) ?? style,
+        maxLines: 1,
+      );
+    } else {
+      content = TextField(
+        controller: editingController,
+        decoration: const InputDecoration(
+          isCollapsed: true,
+          contentPadding: EdgeInsets.zero,
+          border: OutlineInputBorder(
+              borderSide: BorderSide.none
+          ),
+        ),
+        maxLines: 1,
+        minLines: 1,
+        style: globalTextStyle(context)?.merge(style) ?? style,
+        readOnly: readOnly,
+      );
+    }
     return Container(
       padding: const EdgeInsets.fromLTRB(4, 4, 2, 6), // 本来left也应该是2，但不知为何TextField右边总是有大约2的padding
       margin: const EdgeInsets.fromLTRB(4, 4, 4, 4),
@@ -56,22 +80,7 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
         ),
         color: const Color(0xFFF5F5F5),
       ),
-      child: IntrinsicWidth(
-        child: TextField(
-          controller: editingController,
-          decoration: const InputDecoration(
-              isCollapsed: true,
-              contentPadding: EdgeInsets.zero,
-              border: OutlineInputBorder(
-                  borderSide: BorderSide.none
-              ),
-          ),
-          maxLines: 1,
-          minLines: 1,
-          style: globalTextStyle(context)?.merge(style) ?? style,
-          readOnly: widget.theiaKey.currentState?.widget.readOnly ?? false,
-        ),
-      ),
+      child: IntrinsicWidth(child: content,),
     );
   }
 }
