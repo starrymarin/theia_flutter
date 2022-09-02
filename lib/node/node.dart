@@ -4,6 +4,7 @@ import 'package:theia_flutter/node/check.dart';
 import 'package:theia_flutter/node/inline_code.dart';
 import 'package:theia_flutter/node/list.dart';
 import 'package:theia_flutter/node/paragraph.dart';
+import 'package:theia_flutter/node/table.dart';
 import 'package:theia_flutter/node/text.dart';
 
 import 'package:theia_flutter/node/json.dart' as node_json;
@@ -19,6 +20,9 @@ class NodeType {
   static const bulletedList = "bulleted-list";
   static const listItem = "list-item";
   static const checkItem = "check-item";
+  static const table = "table";
+  static const tableRow = "table-row";
+  static const tableCell = "table-cell";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -43,6 +47,12 @@ extension NodeJsonExtension on NodeJson {
           return ListItemNode(this);
         case NodeType.checkItem:
           return CheckItemNode(this);
+        case NodeType.table:
+          return TableNode(this);
+        case NodeType.tableRow:
+          return TableRowNode(this);
+        case NodeType.tableCell:
+          return TableCellNode(this);
         case null:
           return null;
       }
@@ -104,5 +114,5 @@ abstract class InlineNode extends ElementNode {
   Widget? build(BuildContext context, TheiaKey theiaKey) => null;
 
   @override
-  WidgetSpan buildSpan({TextStyle? textStyle, required TheiaKey theiaKey});
+  InlineSpan buildSpan({TextStyle? textStyle, required TheiaKey theiaKey});
 }

@@ -31,7 +31,7 @@ class InlineTextFieldState extends State<InlineTextField> {
   Widget build(BuildContext context) {
     final readOnly = widget.theiaKey.currentState?.widget.readOnly ?? false;
     if (readOnly) {
-      return Container(
+      return SizedBox(
         width: double.infinity,
         child: Text.rich(
           editingController.buildTextSpan(context: context, withComposing: false),

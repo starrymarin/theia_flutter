@@ -45,7 +45,7 @@ class TheiaState extends State<Theia> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = SingleChildScrollView(
+    Widget content = Scrollbar(child: SingleChildScrollView(
       child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
           child: GlobalTextStyle(
@@ -64,7 +64,7 @@ class TheiaState extends State<Theia> {
             ),
           )
       ),
-    );
+    ));
     if (widget.readOnly) {
       content = SelectionArea(child: content);
     }

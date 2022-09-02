@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
+import 'package:theia_flutter/node/text.dart';
 import 'package:theia_flutter/text.dart';
 import 'package:theia_flutter/theia.dart';
 
@@ -8,7 +9,7 @@ class InlineCodeNode extends InlineNode {
   InlineCodeNode(super.json);
 
   @override
-  WidgetSpan buildSpan({TextStyle? textStyle, required TheiaKey theiaKey}) {
+  InlineSpan buildSpan({TextStyle? textStyle, required TheiaKey theiaKey}) {
     return WidgetSpan(
       child: InlineCodeTextField(elementNode: this, theiaKey: theiaKey),
       baseline: TextBaseline.alphabetic,
