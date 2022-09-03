@@ -34,6 +34,7 @@ class InlineTextFieldState extends State<InlineTextField> {
         child: Text.rich(
           editingController.buildTextSpan(context: context, withComposing: false),
           style: inheritedTextStyle(context),
+          textAlign: inheritedTextAlign(context),
         ),
       );
     } else {
@@ -47,6 +48,7 @@ class InlineTextFieldState extends State<InlineTextField> {
             focusedBorder: InputBorder.none
         ),
         style: inheritedTextStyle(context),
+        textAlign: inheritedTextAlign(context) ?? TextAlign.start,
       );
     }
   }
@@ -88,18 +90,26 @@ class InlineTextEditingController extends TextEditingController {
 }
 
 TextStyle? inheritedTextStyle(BuildContext context) {
-  return context.dependOnInheritedWidgetOfExactType<_InheritedTextTheme>()?.textStyle;
+  return _InheritedTextTheme.of(context)?.textStyle;
+}
+
+TextAlign? inheritedTextAlign(BuildContext context) {
+  return _InheritedTextTheme.of(context)?.textAlign;
 }
 
 class InheritedTextTheme extends StatelessWidget {
   const InheritedTextTheme({
     super.key,
-    required TextStyle textStyle,
+    TextStyle? textStyle,
+    TextAlign? textAlign,
     required this.child,
     this.inherit = true
-  }) : _textStyle = textStyle;
+  }): _textStyle = textStyle,
+      _textAlign = textAlign;
 
-  final TextStyle _textStyle;
+  final TextStyle? _textStyle;
+  final TextAlign? _textAlign;
+
   final Widget child;
 
   /// 如果为真，会合并parent的style，如果为假，则不会合并
@@ -107,24 +117,30 @@ class InheritedTextTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = _textStyle;
+    TextStyle? textStyle = _textStyle;
     if (inherit) {
       var ancestorTextStyle = context
           .dependOnInheritedWidgetOfExactType<_InheritedTextTheme>()
           ?.textStyle;
       textStyle = ancestorTextStyle?.merge(_textStyle) ?? _textStyle;
     }
-    return _InheritedTextTheme(textStyle: textStyle, child: child);
+    return _InheritedTextTheme(textStyle, _textAlign, child);
   }
 }
 
 class _InheritedTextTheme extends InheritedWidget {
-  const _InheritedTextTheme({
-    required this.textStyle,
-    required super.child
-  });
+  static _InheritedTextTheme? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_InheritedTextTheme>();
+  }
 
-  final TextStyle textStyle;
+  const _InheritedTextTheme(
+    this.textStyle,
+    this.textAlign,
+    Widget child
+  ): super(child: child);
+
+  final TextStyle? textStyle;
+  final TextAlign? textAlign;
 
   @override
   bool updateShouldNotify(covariant _InheritedTextTheme oldWidget) {

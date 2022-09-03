@@ -280,7 +280,8 @@
                   }
                 ],
                 "type": "paragraph",
-                "key": "AcYAd"
+                "key": "AcYAd",
+                "align": "right"
               }
             ],
             "type": "table-cell",
@@ -830,6 +831,14 @@
     ]
   },
   {
+    "columns": [
+      {
+        "width": 269
+      },
+      {
+        "width": 435
+      }
+    ],
     "children": [
       {
         "children": [
@@ -906,15 +915,7 @@
       }
     ],
     "type": "table",
-    "key": "QFhJP",
-    "columns": [
-      {
-        "width": 269
-      },
-      {
-        "width": 435
-      }
-    ]
+    "key": "QFhJP"
   },
   {
     "children": [

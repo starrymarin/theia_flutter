@@ -12,3 +12,4 @@ const width = "width";
 const height = "height";
 const header = "header";
 const tableCellBackgroundColor = "backgroundColor";
+const align = "align";

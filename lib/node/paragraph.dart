@@ -11,7 +11,19 @@ class ParagraphNode extends BlockNode {
   final int _indentSize = 30;
 
   ParagraphNodeStyle? _style(BuildContext context) => context
-      .findAncestorWidgetOfExactType<ParagraphNodeStyle>();
+      .dependOnInheritedWidgetOfExactType<ParagraphNodeStyle>();
+
+  String? _align;
+  TextAlign? get align {
+    _align ??= json[node_json.align];
+    switch (_align) {
+      case "center":
+        return TextAlign.center;
+      case "right":
+        return TextAlign.end;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +45,10 @@ class ParagraphNode extends BlockNode {
         return Container(
           margin: style?.inlineTextMargin ?? const EdgeInsets.fromLTRB(0, 8, 0, 8),
           padding: EdgeInsets.fromLTRB((_indentSize * indent).toDouble(), 0, 0, 0),
-          child: InlineTextField(elementNode: this),
+          child: InheritedTextTheme(
+            textAlign: align,
+            child: InlineTextField(elementNode: this),
+          )
         );
       }
     }
@@ -41,19 +56,17 @@ class ParagraphNode extends BlockNode {
   }
 }
 
-class ParagraphNodeStyle extends StatelessWidget {
+class ParagraphNodeStyle extends InheritedWidget {
   const ParagraphNodeStyle({
-    Key? key,
+    super.key,
     this.inlineTextMargin,
-    required this.child
-  }) : super(key: key);
+    required super.child
+  });
 
   final EdgeInsetsGeometry? inlineTextMargin;
-  final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return child;
+  bool updateShouldNotify(covariant ParagraphNodeStyle oldWidget) {
+    return inlineTextMargin != oldWidget.inlineTextMargin;
   }
-
 }
