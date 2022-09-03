@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/text.dart';
 import 'package:theia_flutter/text.dart';
 import 'package:theia_flutter/theia.dart';
 
@@ -9,9 +8,9 @@ class InlineCodeNode extends InlineNode {
   InlineCodeNode(super.json);
 
   @override
-  InlineSpan buildSpan({TextStyle? textStyle, required TheiaKey theiaKey}) {
+  InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
-      child: InlineCodeTextField(elementNode: this, theiaKey: theiaKey),
+      child: InlineCodeTextField(elementNode: this),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.baseline
     );
@@ -21,8 +20,7 @@ class InlineCodeNode extends InlineNode {
 class InlineCodeTextField extends InlineTextField {
   const InlineCodeTextField({
     super.key,
-    required super.elementNode,
-    required super.theiaKey
+    required super.elementNode
   });
 
   @override
@@ -45,7 +43,7 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
         color: Color(0xFF666666)
     );
     Widget content;
-    final readOnly = widget.theiaKey.currentState?.widget.readOnly ?? false;
+    final readOnly = theia(context).readOnly;
     if (readOnly) {
       content = Text.rich(
         editingController.buildTextSpan(context: context, withComposing: false),

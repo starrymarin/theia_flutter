@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/json.dart' as node_json;
-import 'package:theia_flutter/theia.dart';
 import 'package:theia_flutter/utils/color.dart';
 
 class TableNode extends BlockNode {
@@ -39,14 +38,14 @@ class TableNode extends BlockNode {
   }
 
   @override
-  Widget build(BuildContext context, TheiaKey theiaKey) {
+  Widget build(BuildContext context) {
     List<Widget> rowWidgets = [];
     for (int index = 0; index < rows.length; index++) {
       final row = rows[index];
       rowWidgets.add(
         IntrinsicHeight(
           child: Builder(builder: (context) {
-            return row.buildByTable(context, theiaKey, this);
+            return row.buildByTable(context, this);
           })
         )
       );
@@ -82,7 +81,7 @@ class TableRowNode extends BlockNode {
     return _cells ?? [];
   }
 
-  Widget buildByTable(BuildContext context, TheiaKey theiaKey, TableNode tableNode) {
+  Widget buildByTable(BuildContext context, TableNode tableNode) {
     List<Widget> cellWidgets = [];
     for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
       final cell = cells[cellIndex];
@@ -100,7 +99,7 @@ class TableRowNode extends BlockNode {
                 ),
               color: (json[node_json.header] as bool?) == true ? const Color(0xFFF3F3F3) : null
             ),
-            child: cell.build(context, theiaKey),
+            child: cell.build(context),
           );
         })
       );
@@ -113,7 +112,7 @@ class TableRowNode extends BlockNode {
 
   /// use [buildByTable]
   @override
-  Widget build(BuildContext context, TheiaKey theiaKey) {
+  Widget build(BuildContext context) {
     return Container();
   }
 
@@ -123,13 +122,13 @@ class TableCellNode extends BlockNode {
   TableCellNode(super.json);
 
   @override
-  Widget build(BuildContext context, TheiaKey theiaKey) {
+  Widget build(BuildContext context) {
     List<Widget> childrenWidgets = [];
     for (var child in children) {
       if (child is BlockNode) {
         childrenWidgets.add(
           Builder(builder: (context) {
-            return child.build(context, theiaKey);
+            return child.build(context);
           })
         );
       }

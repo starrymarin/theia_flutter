@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/json.dart' as node_json;
-import 'package:theia_flutter/theia.dart';
 import 'package:theia_flutter/utils/color.dart';
 
 class TextNode extends Node {
@@ -17,10 +15,10 @@ class TextNode extends Node {
   double? get fontSize => json[node_json.fontSize]?.toDouble();
 
   @override
-  Widget? build(BuildContext context, TheiaKey theiaKey) => null;
+  Widget? build(BuildContext context) => null;
 
   @override
-  InlineSpan buildSpan({TextStyle? textStyle, required TheiaKey theiaKey}) {
+  InlineSpan buildSpan({TextStyle? textStyle}) {
     TextStyle newStyle = TextStyle(
       backgroundColor: backgroundColor,
       color: color,

@@ -8,7 +8,6 @@ import 'package:theia_flutter/node/table.dart';
 import 'package:theia_flutter/node/text.dart';
 
 import 'package:theia_flutter/node/json.dart' as node_json;
-import 'package:theia_flutter/theia.dart';
 
 typedef NodeJson = Map<String, dynamic>;
 
@@ -66,9 +65,9 @@ abstract class Node {
 
   final NodeJson json;
 
-  Widget? build(BuildContext context, TheiaKey theiaKey);
+  Widget? build(BuildContext context);
 
-  InlineSpan? buildSpan({TextStyle? textStyle, required TheiaKey theiaKey});
+  InlineSpan? buildSpan({TextStyle? textStyle});
 }
 
 abstract class ElementNode extends Node {
@@ -101,18 +100,18 @@ abstract class BlockNode extends ElementNode {
   BlockNode(super.json);
 
   @override
-  Widget build(BuildContext context, TheiaKey theiaKey);
+  Widget build(BuildContext context);
 
   @override
-  InlineSpan? buildSpan({TextStyle? textStyle, required TheiaKey theiaKey}) => null;
+  InlineSpan? buildSpan({TextStyle? textStyle}) => null;
 }
 
 abstract class InlineNode extends ElementNode {
   InlineNode(super.json);
 
   @override
-  Widget? build(BuildContext context, TheiaKey theiaKey) => null;
+  Widget? build(BuildContext context) => null;
 
   @override
-  InlineSpan buildSpan({TextStyle? textStyle, required TheiaKey theiaKey});
+  InlineSpan buildSpan({TextStyle? textStyle});
 }

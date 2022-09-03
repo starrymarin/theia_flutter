@@ -6,12 +6,10 @@ import 'package:theia_flutter/theia.dart';
 class InlineTextField extends StatefulWidget {
   const InlineTextField({
     Key? key,
-    required this.elementNode,
-    required this.theiaKey
+    required this.elementNode
   }) : super(key: key);
 
   final ElementNode elementNode;
-  final TheiaKey theiaKey;
 
   @override
   State<StatefulWidget> createState() => InlineTextFieldState();
@@ -24,12 +22,12 @@ class InlineTextFieldState extends State<InlineTextField> {
   @override
   void initState() {
     super.initState();
-    editingController = InlineTextEditingController(widget.elementNode, widget.theiaKey);
+    editingController = InlineTextEditingController(widget.elementNode);
   }
 
   @override
   Widget build(BuildContext context) {
-    final readOnly = widget.theiaKey.currentState?.widget.readOnly ?? false;
+    final readOnly = theia(context).readOnly;
     if (readOnly) {
       return SizedBox(
         width: double.infinity,
@@ -49,7 +47,6 @@ class InlineTextFieldState extends State<InlineTextField> {
             focusedBorder: InputBorder.none
         ),
         style: globalTextStyle(context),
-        readOnly: widget.theiaKey.currentState?.widget.readOnly ?? false,
       );
     }
   }
@@ -62,7 +59,7 @@ class InlineTextFieldState extends State<InlineTextField> {
 }
 
 class InlineTextEditingController extends TextEditingController {
-  InlineTextEditingController(this.elementNode, this.theiaKey) {
+  InlineTextEditingController(this.elementNode) {
     StringBuffer stringBuffer = StringBuffer();
     for (Node child in elementNode.children) {
       if (child is InlineNode) {
@@ -75,7 +72,6 @@ class InlineTextEditingController extends TextEditingController {
   }
 
   final ElementNode elementNode;
-  final TheiaKey theiaKey;
 
   @override
   TextSpan buildTextSpan(
@@ -84,7 +80,7 @@ class InlineTextEditingController extends TextEditingController {
       required bool withComposing}) {
     return TextSpan(
         children: elementNode.children
-            .map((child) => child.buildSpan(textStyle: style, theiaKey: theiaKey))
+            .map((child) => child.buildSpan(textStyle: style))
             .whereType<InlineSpan>()
             .toList(growable: false),
     );

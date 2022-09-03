@@ -1,10 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/paragraph.dart';
 import 'package:theia_flutter/text.dart';
-import 'package:theia_flutter/theia.dart';
 
 enum ListType {
   numbered,
@@ -17,7 +14,7 @@ abstract class ListNode extends BlockNode {
   ListType listType();
 
   @override
-  Widget build(BuildContext context, TheiaKey theiaKey) {
+  Widget build(BuildContext context) {
     List<Widget> items = [];
     for (var index = 0; index < children.length; index++) {
       final child = children[index];
@@ -28,7 +25,7 @@ abstract class ListNode extends BlockNode {
           ParagraphNodeStyle(
             inlineTextMargin: EdgeInsets.zero,
             child: Builder(builder: (context) {
-              return child.buildByListType(context, theiaKey, index, listType());
+              return child.buildByListType(context, index, listType());
             }),
           )
       );
@@ -60,11 +57,11 @@ class ListItemNode extends BlockNode {
 
   /// use [buildByListType]
   @override
-  Widget build(BuildContext context, TheiaKey theiaKey) {
+  Widget build(BuildContext context) {
     return Container();
   }
 
-  Widget buildByListType(BuildContext context, TheiaKey theiaKey, int index, ListType listType) {
+  Widget buildByListType(BuildContext context, int index, ListType listType) {
     var label = "";
     var labelStyle = globalTextStyle(context);
     switch (listType) {
@@ -96,7 +93,7 @@ class ListItemNode extends BlockNode {
             children: children
                 .whereType<BlockNode>()
                 .map((child) => Builder(builder: (context) {
-                  return child.build(context, theiaKey);
+                  return child.build(context);
                 }))
                 .toList(),
           ))

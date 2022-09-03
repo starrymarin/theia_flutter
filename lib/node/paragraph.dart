@@ -3,7 +3,6 @@ import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/text.dart';
 import 'package:theia_flutter/text.dart';
 import 'package:theia_flutter/node/json.dart' as node_json;
-import 'package:theia_flutter/theia.dart';
 
 class ParagraphNode extends BlockNode {
   ParagraphNode(super.json);
@@ -15,13 +14,13 @@ class ParagraphNode extends BlockNode {
       .findAncestorWidgetOfExactType<ParagraphNodeStyle>();
 
   @override
-  Widget build(BuildContext context, TheiaKey theiaKey) {
+  Widget build(BuildContext context) {
     if (children.isNotEmpty == true) {
       var firstChild = children.first;
       if (firstChild is BlockNode) {
         var childrenWidgets = children
             .whereType<BlockNode>()
-            .map((child) => Builder(builder: (context) => child.build(context, theiaKey)))
+            .map((child) => Builder(builder: (context) => child.build(context)))
             .whereType<Widget>()
             .toList();
         return Column(
@@ -34,7 +33,7 @@ class ParagraphNode extends BlockNode {
         return Container(
           margin: style?.inlineTextMargin ?? const EdgeInsets.fromLTRB(0, 8, 0, 8),
           padding: EdgeInsets.fromLTRB((_indentSize * indent).toDouble(), 0, 0, 0),
-          child: InlineTextField(elementNode: this, theiaKey: theiaKey),
+          child: InlineTextField(elementNode: this),
         );
       }
     }

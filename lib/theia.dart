@@ -11,15 +11,17 @@ import 'package:theia_flutter/text.dart';
 /// 手势到哪一个TextField上面，哪一个TextField处理选区，最后再拼接起来
 ///
 
-typedef TheiaKey = GlobalKey<TheiaState>;
+Theia theia(BuildContext context) {
+  return _InheritedTheia.of(context).theia;
+}
 
 class Theia extends StatefulWidget {
-  Theia({
+  const Theia({
     Key? key,
     List<NodeJson>? document,
     this.readOnly = true
   }) : _document = document,
-        super(key: key ?? TheiaKey());
+        super(key: key);
 
   final List<NodeJson>? _document;
   List<NodeJson> get document => _document ??
@@ -41,8 +43,6 @@ class Theia extends StatefulWidget {
 }
 
 class TheiaState extends State<Theia> {
-  TheiaKey get key => widget.key! as TheiaKey;
-
   @override
   Widget build(BuildContext context) {
     Widget content = Scrollbar(child: SingleChildScrollView(
@@ -58,7 +58,7 @@ class TheiaState extends State<Theia> {
               children: widget.document
                   .map((nodeJson) => nodeJson.toNode())
                   .whereType<BlockNode>()
-                  .map((node) => Builder(builder: (context) => node.build(context, key)))
+                  .map((node) => Builder(builder: (context) => node.build(context)))
                   .whereType<Widget>()
                   .toList(growable: false),
             ),
@@ -68,6 +68,25 @@ class TheiaState extends State<Theia> {
     if (widget.readOnly) {
       content = SelectionArea(child: content);
     }
-    return content;
+    return _InheritedTheia(theia: widget, child: content);
   }
+}
+
+class _InheritedTheia extends InheritedWidget {
+  static _InheritedTheia of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_InheritedTheia>()!;
+  }
+
+  const _InheritedTheia({
+    required this.theia,
+    required super.child
+  });
+
+  final Theia theia;
+
+  @override
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
+    return false;
+  }
+
 }
