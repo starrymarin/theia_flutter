@@ -25,8 +25,8 @@ class BlockQuoteNode extends BlockNode {
       );
     }
 
-    return GlobalTextStyle(
-      style: const TextStyle(
+    return InheritedTextTheme(
+      textStyle: const TextStyle(
           color: Color(0xFF999999)
       ),
       child: Container(

@@ -48,8 +48,8 @@ class TheiaState extends State<Theia> {
     Widget content = Scrollbar(child: SingleChildScrollView(
       child: Padding(
           padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: GlobalTextStyle(
-            style: const TextStyle(
+          child: InheritedTextTheme(
+            textStyle: const TextStyle(
                 fontSize: defaultFontSize,
                 color: Color(0xFF333333),
                 height: 1.6

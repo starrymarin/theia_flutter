@@ -63,7 +63,7 @@ class ListItemNode extends BlockNode {
 
   Widget buildByListType(BuildContext context, int index, ListType listType) {
     var label = "";
-    var labelStyle = globalTextStyle(context);
+    var labelStyle = inheritedTextStyle(context);
     switch (listType) {
       case ListType.numbered:
         label = "${index + 1}. ";

@@ -47,7 +47,7 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
     if (readOnly) {
       content = Text.rich(
         editingController.buildTextSpan(context: context, withComposing: false),
-        style: globalTextStyle(context)?.merge(style) ?? style,
+        style: inheritedTextStyle(context)?.merge(style) ?? style,
         maxLines: 1,
       );
     } else {
@@ -62,7 +62,7 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
         ),
         maxLines: 1,
         minLines: 1,
-        style: globalTextStyle(context)?.merge(style) ?? style,
+        style: inheritedTextStyle(context)?.merge(style) ?? style,
         readOnly: readOnly,
       );
     }

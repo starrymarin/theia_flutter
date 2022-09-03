@@ -33,7 +33,7 @@ class InlineTextFieldState extends State<InlineTextField> {
         width: double.infinity,
         child: Text.rich(
           editingController.buildTextSpan(context: context, withComposing: false),
-          style: globalTextStyle(context),
+          style: inheritedTextStyle(context),
         ),
       );
     } else {
@@ -46,7 +46,7 @@ class InlineTextFieldState extends State<InlineTextField> {
             border: InputBorder.none,
             focusedBorder: InputBorder.none
         ),
-        style: globalTextStyle(context),
+        style: inheritedTextStyle(context),
       );
     }
   }
@@ -87,36 +87,47 @@ class InlineTextEditingController extends TextEditingController {
   }
 }
 
-TextStyle? globalTextStyle(BuildContext context) {
-  final globalTextStyle = context
-      .findAncestorWidgetOfExactType<GlobalTextStyle>();
-  return globalTextStyle?.style;
+TextStyle? inheritedTextStyle(BuildContext context) {
+  return context.dependOnInheritedWidgetOfExactType<_InheritedTextTheme>()?.textStyle;
 }
 
-class GlobalTextStyle extends StatelessWidget {
-  GlobalTextStyle({
-    Key? key,
-    this.inherit = true,
-    required TextStyle style,
+class InheritedTextTheme extends StatelessWidget {
+  const InheritedTextTheme({
+    super.key,
+    required TextStyle textStyle,
     required this.child,
-  }) : _style = style,
-        super(key: key);
+    this.inherit = true
+  }) : _textStyle = textStyle;
 
+  final TextStyle _textStyle;
   final Widget child;
-
-  TextStyle _style;
-  TextStyle get style => _style;
 
   /// 如果为真，会合并parent的style，如果为假，则不会合并
   final bool inherit;
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = _textStyle;
     if (inherit) {
-      final parentGlobalTextStyle = context
-          .findAncestorWidgetOfExactType<GlobalTextStyle>();
-      _style = parentGlobalTextStyle?.style.merge(_style) ?? style;
+      var ancestorTextStyle = context
+          .dependOnInheritedWidgetOfExactType<_InheritedTextTheme>()
+          ?.textStyle;
+      textStyle = ancestorTextStyle?.merge(_textStyle) ?? _textStyle;
     }
-    return child;
+    return _InheritedTextTheme(textStyle: textStyle, child: child);
+  }
+}
+
+class _InheritedTextTheme extends InheritedWidget {
+  const _InheritedTextTheme({
+    required this.textStyle,
+    required super.child
+  });
+
+  final TextStyle textStyle;
+
+  @override
+  bool updateShouldNotify(covariant _InheritedTextTheme oldWidget) {
+    return oldWidget.textStyle != textStyle;
   }
 }
