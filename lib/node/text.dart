@@ -8,7 +8,8 @@ class TextNode extends Node {
 
   String get text => json[node_json.text] ?? "";
 
-  Color? get backgroundColor => json[node_json.backgroundColor]?.toString().toColor();
+  Color? get backgroundColor =>
+      json[node_json.backgroundColor]?.toString().toColor();
 
   Color? get color => json[node_json.color]?.toString().toColor();
 

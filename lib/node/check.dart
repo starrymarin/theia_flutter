@@ -38,14 +38,15 @@ class CheckItemNode extends BlockNode {
               child: icon,
             ),
           ),
-          Expanded(child: Column(
-            children: children
-                .map((child) => InlineTextField(elementNode: this))
-                .toList(),
-          ))
+          Expanded(
+            child: Column(
+              children: children
+                  .map((child) => InlineTextField(elementNode: this))
+                  .toList(),
+            ),
+          )
         ],
       ),
     );
   }
-
 }

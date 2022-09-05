@@ -10,10 +10,11 @@ class ParagraphNode extends BlockNode {
   int get indent => json[node_json.indent] ?? 0;
   final int _indentSize = 30;
 
-  ParagraphNodeStyle? _style(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<ParagraphNodeStyle>();
+  ParagraphNodeStyle? _style(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ParagraphNodeStyle>();
 
   String? _align;
+
   TextAlign? get align {
     _align ??= json[node_json.align];
     switch (_align) {
@@ -43,12 +44,14 @@ class ParagraphNode extends BlockNode {
       if (firstChild is InlineNode || firstChild is TextNode) {
         final style = _style(context);
         return Container(
-          margin: style?.inlineTextMargin ?? const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          padding: EdgeInsets.fromLTRB((_indentSize * indent).toDouble(), 0, 0, 0),
-          child: InheritedTextTheme(
-            textAlign: align,
-            child: InlineTextField(elementNode: this),
-          )
+            margin: style?.inlineTextMargin ??
+                const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            padding:
+                EdgeInsets.fromLTRB((_indentSize * indent).toDouble(), 0, 0, 0),
+            child: InheritedTextTheme(
+              textAlign: align,
+              child: InlineTextField(elementNode: this),
+            ),
         );
       }
     }
@@ -57,11 +60,8 @@ class ParagraphNode extends BlockNode {
 }
 
 class ParagraphNodeStyle extends InheritedWidget {
-  const ParagraphNodeStyle({
-    super.key,
-    this.inlineTextMargin,
-    required super.child
-  });
+  const ParagraphNodeStyle(
+      {super.key, this.inlineTextMargin, required super.child});
 
   final EdgeInsetsGeometry? inlineTextMargin;
 

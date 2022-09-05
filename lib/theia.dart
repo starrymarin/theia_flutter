@@ -16,22 +16,19 @@ Theia theia(BuildContext context) {
 }
 
 class Theia extends StatefulWidget {
-  const Theia({
-    Key? key,
-    List<NodeJson>? document,
-    this.readOnly = true
-  }) : _document = document,
+  const Theia({Key? key, List<NodeJson>? document, this.readOnly = false})
+      : _document = document,
         super(key: key);
 
   final List<NodeJson>? _document;
-  List<NodeJson> get document => _document ??
+
+  List<NodeJson> get document =>
+      _document ??
       [
         {
           node_json.type: NodeType.paragraph,
           node_json.children: [
-            {
-              node_json.text: "\u200b"
-            }
+            {node_json.text: "\u200b"}
           ]
         },
       ];
@@ -45,30 +42,32 @@ class Theia extends StatefulWidget {
 class TheiaState extends State<Theia> {
   @override
   Widget build(BuildContext context) {
-    Widget content = Scrollbar(child: SingleChildScrollView(
-      child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          child: InheritedTextTheme(
-            textStyle: const TextStyle(
-                fontSize: defaultFontSize,
-                color: Color(0xFF333333),
-                height: 1.6
+    return _InheritedTheia(
+        theia: widget,
+        child: SelectionArea(
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: InheritedTextTheme(
+                  textStyle: const TextStyle(
+                      fontSize: defaultFontSize,
+                      color: Color(0xFF333333),
+                      height: 1.6),
+                  child: Column(
+                    children: widget.document
+                        .map((nodeJson) => nodeJson.toNode())
+                        .whereType<BlockNode>()
+                        .map((node) =>
+                            Builder(builder: (context) => node.build(context)))
+                        .whereType<Widget>()
+                        .toList(growable: false),
+                  ),
+                ),
+              ),
             ),
-            child: Column(
-              children: widget.document
-                  .map((nodeJson) => nodeJson.toNode())
-                  .whereType<BlockNode>()
-                  .map((node) => Builder(builder: (context) => node.build(context)))
-                  .whereType<Widget>()
-                  .toList(growable: false),
-            ),
-          )
-      ),
-    ));
-    if (widget.readOnly) {
-      content = SelectionArea(child: content);
-    }
-    return _InheritedTheia(theia: widget, child: content);
+          ),
+        ));
   }
 }
 
@@ -77,10 +76,7 @@ class _InheritedTheia extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<_InheritedTheia>()!;
   }
 
-  const _InheritedTheia({
-    required this.theia,
-    required super.child
-  });
+  const _InheritedTheia({required this.theia, required super.child});
 
   final Theia theia;
 
@@ -88,5 +84,4 @@ class _InheritedTheia extends InheritedWidget {
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     return false;
   }
-
 }
