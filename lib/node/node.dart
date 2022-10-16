@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/block_quote.dart';
 import 'package:theia_flutter/node/check.dart';
+import 'package:theia_flutter/node/date.dart';
 import 'package:theia_flutter/node/inline_code.dart';
+import 'package:theia_flutter/node/label.dart';
 import 'package:theia_flutter/node/list.dart';
 import 'package:theia_flutter/node/paragraph.dart';
 import 'package:theia_flutter/node/table.dart';
@@ -22,6 +24,8 @@ class NodeType {
   static const table = "table";
   static const tableRow = "table-row";
   static const tableCell = "table-cell";
+  static const label = "label";
+  static const date = "date";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -52,6 +56,10 @@ extension NodeJsonExtension on NodeJson {
           return TableRowNode(this);
         case NodeType.tableCell:
           return TableCellNode(this);
+        case NodeType.label:
+          return LabelNode(this);
+        case NodeType.date:
+          return DateNode(this);
         case null:
           return null;
       }
