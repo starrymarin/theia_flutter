@@ -14,6 +14,14 @@ class TextNode extends Node {
 
   double? get fontSize => json[node_json.fontSize]?.toDouble();
 
+  bool? get bold => json[node_json.bold];
+
+  bool? get italic => json[node_json.italic];
+
+  bool? get underlined => json[node_json.underlined];
+
+  bool? get strikethrough => json[node_json.strikethrough];
+
   @override
   Widget? build(BuildContext context) => null;
 
@@ -23,6 +31,12 @@ class TextNode extends Node {
       backgroundColor: backgroundColor,
       color: color,
       fontSize: fontSize,
+      fontWeight: bold ?? false ? FontWeight.bold : FontWeight.normal,
+      fontStyle: italic ?? false ? FontStyle.italic : FontStyle.normal,
+      decoration: TextDecoration.combine([
+        underlined ?? false ? TextDecoration.underline : TextDecoration.none,
+        strikethrough ?? false ? TextDecoration.lineThrough : TextDecoration.none,
+      ]),
     );
     TextStyle style = textStyle?.merge(newStyle) ?? newStyle;
     return TextSpan(
