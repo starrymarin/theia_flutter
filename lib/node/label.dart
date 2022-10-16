@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:theia_flutter/node/node.dart';
+import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/utils/color.dart';
+
+class LabelNode extends Node {
+  LabelNode(super.json);
+
+  String get label => json[node_json.label] ?? "";
+
+  Color? get color => json[node_json.color]?.toString().toColor();
+
+  @override
+  Widget? build(BuildContext context) => null;
+
+  @override
+  InlineSpan buildSpan({TextStyle? textStyle}) {
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: Container(
+        margin: const EdgeInsets.all(2),
+        padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
+        constraints: const BoxConstraints(
+          maxWidth: 160,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          color: color?.withOpacity(0.15),
+        ),
+        child: Text(
+          label,
+          style:
+              TextStyle(color: color, textBaseline: TextBaseline.ideographic),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+}

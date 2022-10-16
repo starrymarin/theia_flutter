@@ -17,3 +17,5 @@ const height = "height";
 const header = "header";
 const tableCellBackgroundColor = "backgroundColor";
 const align = "align";
+const label = "label";
+const date = "date";
