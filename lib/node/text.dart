@@ -31,13 +31,14 @@ class TextNode extends Node {
       backgroundColor: backgroundColor,
       color: color,
       fontSize: fontSize,
-      fontWeight: bold ?? false ? FontWeight.bold : FontWeight.normal,
-      fontStyle: italic ?? false ? FontStyle.italic : FontStyle.normal,
+      fontWeight: bold ?? false ? FontWeight.bold : textStyle?.fontWeight,
+      fontStyle: italic ?? false ? FontStyle.italic : textStyle?.fontStyle,
       decoration: TextDecoration.combine([
         underlined ?? false ? TextDecoration.underline : TextDecoration.none,
         strikethrough ?? false ? TextDecoration.lineThrough : TextDecoration.none,
       ]),
     );
+
     TextStyle style = textStyle?.merge(newStyle) ?? newStyle;
     return TextSpan(
       text: text,
