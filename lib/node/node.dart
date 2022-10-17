@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/block_quote.dart';
 import 'package:theia_flutter/node/check.dart';
 import 'package:theia_flutter/node/date.dart';
+import 'package:theia_flutter/node/heading.dart';
 import 'package:theia_flutter/node/inline_code.dart';
 import 'package:theia_flutter/node/label.dart';
 import 'package:theia_flutter/node/list.dart';
@@ -26,6 +27,10 @@ class NodeType {
   static const tableCell = "table-cell";
   static const label = "label";
   static const date = "date";
+  static const heading1 = "heading-one";
+  static const heading2 = "heading-two";
+  static const heading3 = "heading-three";
+  static const heading4 = "heading-four";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -60,6 +65,14 @@ extension NodeJsonExtension on NodeJson {
           return LabelNode(this);
         case NodeType.date:
           return DateNode(this);
+        case NodeType.heading1:
+          return HeadingNode(this, Heading.heading1);
+        case NodeType.heading2:
+          return HeadingNode(this, Heading.heading2);
+        case NodeType.heading3:
+          return HeadingNode(this, Heading.heading3);
+        case NodeType.heading4:
+          return HeadingNode(this, Heading.heading4);
         case null:
           return null;
       }

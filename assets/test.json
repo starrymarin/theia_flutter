@@ -1,12 +1,48 @@
 [{
   "children": [{
-    "text": "标题1"
+    "underlined": true,
+    "text": "标"
+  }, {
+    "underlined": true,
+    "text": "题",
+    "italic": true
+  }, {
+    "text": "1",
+    "underlined": true
   }],
   "type": "heading-one",
   "key": "EmkQP"
 }, {
   "children": [{
-    "text": "标题2"
+    "text": "标"
+  }, {
+    "children": [{
+      "text": "题2",
+      "strike": true,
+      "background-color": "#FF0100",
+      "color": "#FFDA00",
+      "bold": true,
+      "italic": true
+    }],
+    "type": "inline-code",
+    "key": "CmZwm"
+  }, {
+    "text": ""
+  }, {
+    "children": [{
+      "text": ""
+    }],
+    "type": "label",
+    "label": "123",
+    "color": "#73d897",
+    "key": "CrDEA"
+  }, {
+    "text": ""
+  }, {
+    "text": "",
+    "strike": true,
+    "background-color": "#FF0100",
+    "color": "#FFDA00"
   }],
   "type": "heading-two",
   "key": "JJTwD"
@@ -18,7 +54,10 @@
   "key": "pATzw"
 }, {
   "children": [{
-    "text": "标题4"
+    "text": "标"
+  }, {
+    "text": "题4",
+    "bold": true
   }],
   "type": "heading-four",
   "key": "cTZNt"
@@ -69,7 +108,20 @@
     "text": "文正文正",
     "font-size": 24
   }, {
-    "text": "文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文"
+    "text": "文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文"
+  }, {
+    "children": [{
+      "text": "题2",
+      "strike": true,
+      "background-color": "#FF0100",
+      "color": "#FFDA00",
+      "bold": true,
+      "italic": true
+    }],
+    "type": "inline-code",
+    "key": "PaYNM"
+  }, {
+    "text": "正文正文"
   }],
   "type": "paragraph",
   "key": "iweMH"
@@ -138,7 +190,7 @@
       "text": "嘎嘎嘎嘎嘎",
       "color": "#FF0100"
     }, {
-      "text": "嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎"
+      "text": "嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎"
     }, {
       "children": [{
         "text": "嘎嘎嘎嘎嘎"
@@ -155,7 +207,17 @@
       "date": 1665704662005,
       "key": "YYaQb"
     }, {
-      "text": "嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎"
+      "text": "嘎嘎嘎嘎嘎嘎嘎嘎嘎"
+    }, {
+      "children": [{
+        "text": ""
+      }],
+      "type": "label",
+      "label": "嘎嘎嘎",
+      "color": "#56abfb",
+      "key": "FWrfM"
+    }, {
+      "text": "嘎嘎嘎嘎嘎嘎嘎嘎嘎嘎"
     }, {
       "children": [{
         "text": ""
@@ -189,7 +251,16 @@
   "children": [{
     "children": [{
       "children": [{
-        "text": "qqqqqqq热热热柔柔弱弱柔柔弱弱然然然然然然eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeyyyyyyyyyyyyyyyyyyyyy"
+        "text": "qqqqqqq热热热柔柔弱弱柔柔弱弱然然然然然然eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeey"
+      }, {
+        "children": [{
+          "text": ""
+        }],
+        "type": "date",
+        "date": 1666841265,
+        "key": "Gheix"
+      }, {
+        "text": "yyyyyyyyyyyyyyyyyyy"
       }],
       "type": "paragraph",
       "key": "zrnNm"
@@ -234,7 +305,15 @@
   }, {
     "children": [{
       "children": [{
-        "text": "uj67j67j57j657"
+        "text": "uj67j6"
+      }, {
+        "children": [{
+          "text": "7j57j657"
+        }],
+        "type": "inline-code",
+        "key": "xDdJs"
+      }, {
+        "text": ""
       }],
       "type": "paragraph",
       "key": "RCYXA"
@@ -501,7 +580,7 @@
             "text": ""
           }],
           "type": "label",
-          "label": "标签123标签标签",
+          "label": "标签太长会超出去",
           "color": "#73d897",
           "key": "fwQsj"
         }, {
@@ -519,6 +598,15 @@
         "align": "center"
       }, {
         "children": [{
+          "text": ""
+        }, {
+          "children": [{
+            "text": ""
+          }],
+          "type": "date",
+          "date": 1666841246,
+          "key": "dEkmi"
+        }, {
           "text": ""
         }],
         "type": "paragraph",
@@ -580,7 +668,7 @@
         "children": [{
           "text": "qewttttttttttttttttttttttttttttttttttttttttttttttttvdfv"
         }],
-        "type": "paragraph",
+        "type": "heading-two",
         "key": "ikHmy"
       }],
       "type": "table-cell",
@@ -782,17 +870,17 @@
   "type": "table",
   "key": "ZnrKw",
   "columns": [{
-    "width": 67
+    "width": 124
   }, {
-    "width": 112
+    "width": 138
   }, {
     "width": 41
   }, {
-    "width": 57
+    "width": 41
   }, {
-    "width": 73
+    "width": 41
   }, {
-    "width": 212
+    "width": 177
   }, {
     "width": 190
   }, {
