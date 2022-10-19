@@ -41,4 +41,3 @@ class HeadingNode extends BlockNode {
   @override
   InlineSpan? buildSpan({TextStyle? textStyle}) => null;
 }
-

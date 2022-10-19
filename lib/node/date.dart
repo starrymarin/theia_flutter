@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/json.dart' as node_json;
 
-class DateNode extends Node {
+class DateNode extends InlineNode {
   DateNode(super.json);
 
   int get date {
