@@ -3,7 +3,7 @@ import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/json.dart' as node_json;
 import 'package:theia_flutter/utils/color.dart';
 
-class LabelNode extends Node {
+class LabelNode extends InlineNode {
   LabelNode(super.json);
 
   String get label => json[node_json.label] ?? "";
