@@ -14,9 +14,6 @@ class DateNode extends InlineNode {
   }
 
   @override
-  Widget? build(BuildContext context) => null;
-
-  @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
       alignment: PlaceholderAlignment.middle,
