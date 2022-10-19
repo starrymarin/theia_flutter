@@ -17,31 +17,25 @@ class BlockQuoteNode extends BlockNode {
       }
       childrenWidgets.add(
         ParagraphNodeStyle(
-          inlineTextMargin: EdgeInsets.fromLTRB(
-              0, 0, 0, index < children.length - 1 ? 8 : 0
-          ),
+          inlineTextMargin:
+              EdgeInsets.fromLTRB(0, 0, 0, index < children.length - 1 ? 8 : 0),
           child: Builder(builder: (context) => child.build(context)),
-        )
+        ),
       );
     }
 
     return InheritedTextTheme(
-      textStyle: const TextStyle(
-          color: Color(0xFF999999)
-      ),
+      textStyle: const TextStyle(color: Color(0xFF999999)),
       child: Container(
         decoration: const BoxDecoration(
           border: Border(
-            left: BorderSide(
-              color: Color(0xFFEEEEEE),
-              width: 4
-            )
-          )
+            left: BorderSide(color: Color(0xFFEEEEEE), width: 4),
+          ),
         ),
         padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
         margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-        child: Column(children: childrenWidgets)
-      )
+        child: Column(children: childrenWidgets),
+      ),
     );
   }
 }

@@ -12,16 +12,13 @@ class InlineCodeNode extends InlineNode {
     return WidgetSpan(
       child: InlineCodeTextField(elementNode: this),
       baseline: TextBaseline.alphabetic,
-      alignment: PlaceholderAlignment.baseline
+      alignment: PlaceholderAlignment.baseline,
     );
   }
 }
 
 class InlineCodeTextField extends InlineTextField {
-  const InlineCodeTextField({
-    super.key,
-    required super.elementNode
-  });
+  const InlineCodeTextField({super.key, required super.elementNode});
 
   @override
   State<StatefulWidget> createState() => InlineCodeTextFieldState();
@@ -29,19 +26,16 @@ class InlineCodeTextField extends InlineTextField {
 
 class InlineCodeTextFieldState extends InlineTextFieldState {
   final board = const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(4)),
-      borderSide: BorderSide(
-          color: Color(0xFFDDDDDD),
-          width: 1
-      )
+    borderRadius: BorderRadius.all(Radius.circular(4)),
+    borderSide: BorderSide(
+      color: Color(0xFFDDDDDD),
+      width: 1,
+    ),
   );
 
   @override
   Widget build(BuildContext context) {
-    const style = TextStyle(
-        fontFamily: monospace,
-        color: Color(0xFF666666)
-    );
+    const style = TextStyle(fontFamily: monospace, color: Color(0xFF666666));
     Widget content;
     final readOnly = theia(context).readOnly;
     if (readOnly) {
@@ -56,9 +50,7 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
         decoration: const InputDecoration(
           isCollapsed: true,
           contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(
-              borderSide: BorderSide.none
-          ),
+          border: OutlineInputBorder(borderSide: BorderSide.none),
         ),
         maxLines: 1,
         minLines: 1,
@@ -67,19 +59,17 @@ class InlineCodeTextFieldState extends InlineTextFieldState {
       );
     }
     return Container(
-      padding: const EdgeInsets.fromLTRB(4, 4, 2, 6), // 本来left也应该是2，但不知为何TextField右边总是有大约2的padding
+      padding: const EdgeInsets.fromLTRB(4, 4, 2, 6),
+      // 本来left也应该是2，但不知为何TextField右边总是有大约2的padding
       margin: const EdgeInsets.fromLTRB(4, 4, 4, 4),
       decoration: BoxDecoration(
-        border: Border.all(
-            color: const Color(0xFFDDDDDD),
-            width: 0.5
-        ),
-        borderRadius: const BorderRadius.all(
-            Radius.circular(4)
-        ),
+        border: Border.all(color: const Color(0xFFDDDDDD), width: 0.5),
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
         color: const Color(0xFFF5F5F5),
       ),
-      child: IntrinsicWidth(child: content,),
+      child: IntrinsicWidth(
+        child: content,
+      ),
     );
   }
 }

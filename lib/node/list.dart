@@ -3,10 +3,7 @@ import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/paragraph.dart';
 import 'package:theia_flutter/text.dart';
 
-enum ListType {
-  numbered,
-  bulleted
-}
+enum ListType { numbered, bulleted }
 
 abstract class ListNode extends BlockNode {
   ListNode(super.json);
@@ -21,14 +18,14 @@ abstract class ListNode extends BlockNode {
       if (child is! ListItemNode) {
         continue;
       }
-      items.add(
-          ParagraphNodeStyle(
-            inlineTextMargin: EdgeInsets.zero,
-            child: Builder(builder: (context) {
-              return child.buildByListType(context, index, listType());
-            }),
-          )
-      );
+      items.add(ParagraphNodeStyle(
+        inlineTextMargin: EdgeInsets.zero,
+        child: Builder(
+          builder: (context) {
+            return child.buildByListType(context, index, listType());
+          },
+        ),
+      ));
     }
 
     return Container(
@@ -70,8 +67,8 @@ class ListItemNode extends BlockNode {
         break;
       case ListType.bulleted:
         label = "\u2022  ";
-        labelStyle = const TextStyle(fontWeight: FontWeight.w900)
-            .merge(labelStyle);
+        labelStyle =
+            const TextStyle(fontWeight: FontWeight.w900).merge(labelStyle);
         break;
     }
     return Container(
@@ -89,17 +86,18 @@ class ListItemNode extends BlockNode {
               ),
             ),
           ),
-          Expanded(child: Column(
-            children: children
-                .whereType<BlockNode>()
-                .map((child) => Builder(builder: (context) {
-                  return child.build(context);
-                }))
-                .toList(),
-          ))
+          Expanded(
+            child: Column(
+              children: children
+                  .whereType<BlockNode>()
+                  .map((child) => Builder(builder: (context) {
+                        return child.build(context);
+                      }))
+                  .toList(),
+            ),
+          )
         ],
       ),
     );
   }
-
 }

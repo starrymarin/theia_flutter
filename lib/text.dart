@@ -4,10 +4,8 @@ import 'package:theia_flutter/node/text.dart';
 import 'package:theia_flutter/theia.dart';
 
 class InlineTextField extends StatefulWidget {
-  const InlineTextField({
-    Key? key,
-    required this.elementNode
-  }) : super(key: key);
+  const InlineTextField({Key? key, required this.elementNode})
+      : super(key: key);
 
   final ElementNode elementNode;
 
@@ -32,7 +30,8 @@ class InlineTextFieldState extends State<InlineTextField> {
       return SizedBox(
         width: double.infinity,
         child: Text.rich(
-          editingController.buildTextSpan(context: context, withComposing: false),
+          editingController.buildTextSpan(
+              context: context, withComposing: false),
           style: inheritedTextStyle(context),
           textAlign: inheritedTextAlign(context),
         ),
@@ -43,9 +42,9 @@ class InlineTextFieldState extends State<InlineTextField> {
         keyboardType: TextInputType.multiline,
         maxLines: null,
         decoration: const InputDecoration(
-            isCollapsed: true,
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none
+          isCollapsed: true,
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
         ),
         style: inheritedTextStyle(context),
         textAlign: inheritedTextAlign(context) ?? TextAlign.start,
@@ -76,15 +75,16 @@ class InlineTextEditingController extends TextEditingController {
   final ElementNode elementNode;
 
   @override
-  TextSpan buildTextSpan(
-      {required BuildContext context,
-      TextStyle? style,
-      required bool withComposing}) {
+  TextSpan buildTextSpan({
+    required BuildContext context,
+    TextStyle? style,
+    required bool withComposing,
+  }) {
     return TextSpan(
-        children: elementNode.children
-            .map((child) => child.buildSpan(textStyle: style))
-            .whereType<InlineSpan>()
-            .toList(growable: false),
+      children: elementNode.children
+          .map((child) => child.buildSpan(textStyle: style))
+          .whereType<InlineSpan>()
+          .toList(growable: false),
     );
   }
 }
@@ -103,9 +103,9 @@ class InheritedTextTheme extends StatelessWidget {
     TextStyle? textStyle,
     TextAlign? textAlign,
     required this.child,
-    this.inherit = true
-  }): _textStyle = textStyle,
-      _textAlign = textAlign;
+    this.inherit = true,
+  })  : _textStyle = textStyle,
+        _textAlign = textAlign;
 
   final TextStyle? _textStyle;
   final TextAlign? _textAlign;
@@ -133,11 +133,8 @@ class _InheritedTextTheme extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<_InheritedTextTheme>();
   }
 
-  const _InheritedTextTheme(
-    this.textStyle,
-    this.textAlign,
-    Widget child
-  ): super(child: child);
+  const _InheritedTextTheme(this.textStyle, this.textAlign, Widget child)
+      : super(child: child);
 
   final TextStyle? textStyle;
   final TextAlign? textAlign;

@@ -43,5 +43,4 @@ class CheckItemNode extends BlockNode {
       ),
     );
   }
-
 }

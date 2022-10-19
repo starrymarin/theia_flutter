@@ -7,19 +7,23 @@ class TableNode extends BlockNode {
   TableNode(super.json);
 
   List<TableRowNode>? _rows;
+
   List<TableRowNode> get rows {
     _rows ??= children.whereType<TableRowNode>().toList();
     return _rows ?? [];
   }
 
   List<NodeJson>? _columns;
+
   List<NodeJson> get columns {
     _columns ??= (json[node_json.columns] as List<dynamic>)
-        .map((element) => element as NodeJson).toList();
+        .map((element) => element as NodeJson)
+        .toList();
     return _columns ?? [];
   }
 
   List<double>? _columnsWidth;
+
   List<double> get columnsWidth {
     _columnsWidth ??= [];
     if (columns.isNotEmpty) {
@@ -46,8 +50,8 @@ class TableNode extends BlockNode {
         IntrinsicHeight(
           child: Builder(builder: (context) {
             return row.buildByTable(context, this);
-          })
-        )
+          }),
+        ),
       );
     }
     return Center(
@@ -61,13 +65,13 @@ class TableNode extends BlockNode {
                 border: Border(
                   left: BorderSide(width: 1, color: Color(0xFFDDDDDD)),
                   bottom: BorderSide(width: 1, color: Color(0xFFDDDDDD)),
-                )
+                ),
               ),
               child: Column(children: rowWidgets),
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }
@@ -76,6 +80,7 @@ class TableRowNode extends BlockNode {
   TableRowNode(super.json);
 
   List<TableCellNode>? _cells;
+
   List<TableCellNode> get cells {
     _cells ??= children.whereType<TableCellNode>().toList();
     return _cells ?? [];
@@ -90,18 +95,20 @@ class TableRowNode extends BlockNode {
           return Container(
             width: tableNode.columnsWidth[cellIndex],
             constraints: BoxConstraints(
-                minHeight: (json[node_json.height] as num?)?.toDouble() ?? 41
+              minHeight: (json[node_json.height] as num?)?.toDouble() ?? 41,
             ),
             decoration: BoxDecoration(
-                border: const Border(
-                    top: BorderSide(color: Color(0xFFDDDDDD), width: 1),
-                    right: BorderSide(color: Color(0xFFDDDDDD), width: 1)
-                ),
-              color: (json[node_json.header] as bool?) == true ? const Color(0xFFF3F3F3) : null
+              border: const Border(
+                top: BorderSide(color: Color(0xFFDDDDDD), width: 1),
+                right: BorderSide(color: Color(0xFFDDDDDD), width: 1),
+              ),
+              color: (json[node_json.header] as bool?) == true
+                  ? const Color(0xFFF3F3F3)
+                  : null,
             ),
             child: cell.build(context),
           );
-        })
+        }),
       );
     }
     return Row(
@@ -115,7 +122,6 @@ class TableRowNode extends BlockNode {
   Widget build(BuildContext context) {
     return Container();
   }
-
 }
 
 class TableCellNode extends BlockNode {
@@ -126,11 +132,9 @@ class TableCellNode extends BlockNode {
     List<Widget> childrenWidgets = [];
     for (var child in children) {
       if (child is BlockNode) {
-        childrenWidgets.add(
-          Builder(builder: (context) {
-            return child.build(context);
-          })
-        );
+        childrenWidgets.add(Builder(builder: (context) {
+          return child.build(context);
+        }));
       }
     }
     return Container(
@@ -141,7 +145,7 @@ class TableCellNode extends BlockNode {
         child: Column(
           children: childrenWidgets,
         ),
-      )
+      ),
     );
   }
 }
