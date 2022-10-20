@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theia_flutter/node/alert.dart';
 import 'package:theia_flutter/node/block_quote.dart';
 import 'package:theia_flutter/node/check.dart';
 import 'package:theia_flutter/node/date.dart';
@@ -35,6 +36,7 @@ class NodeType {
   static const heading5 = "heading-five";
   static const heading6 = "heading-six";
   static const link = "link";
+  static const alert = "alert";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -83,6 +85,8 @@ extension NodeJsonExtension on NodeJson {
           return HeadingNode(this, Heading.heading6);
         case NodeType.link:
           return LinkNode(this);
+        case NodeType.alert:
+          return AlertNode(this);
         case null:
           return null;
       }
