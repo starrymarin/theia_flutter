@@ -22,7 +22,7 @@ class LabelNode extends InlineNode {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          color: color?.withOpacity(0.15),
+          color: color?.withOpacity(0.1),
         ),
         child: Text(
           label,
