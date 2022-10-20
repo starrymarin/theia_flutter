@@ -4,6 +4,7 @@ import 'package:theia_flutter/node/block_quote.dart';
 import 'package:theia_flutter/node/check.dart';
 import 'package:theia_flutter/node/date.dart';
 import 'package:theia_flutter/node/heading.dart';
+import 'package:theia_flutter/node/image.dart';
 import 'package:theia_flutter/node/inline_code.dart';
 import 'package:theia_flutter/node/label.dart';
 import 'package:theia_flutter/node/link.dart';
@@ -37,6 +38,7 @@ class NodeType {
   static const heading6 = "heading-six";
   static const link = "link";
   static const alert = "alert";
+  static const image = "image";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -87,6 +89,8 @@ extension NodeJsonExtension on NodeJson {
           return LinkNode(this);
         case NodeType.alert:
           return AlertNode(this);
+        case NodeType.image:
+          return ImageNode(this);
         case null:
           return null;
       }
@@ -117,12 +121,14 @@ abstract class ElementNode extends Node {
   }
 
   String? _key;
+
   String? get key {
     _key ??= json[node_json.key];
     return _key;
   }
 
   String? _type;
+
   String? get type {
     _type ??= json[node_json.type];
     return _type;

@@ -19,3 +19,7 @@ const tableCellBackgroundColor = "backgroundColor";
 const align = "align";
 const label = "label";
 const date = "date";
+const url = "url";
+const alertType = "alertType";
+const thumbURL = "thumbUrl";
+const originalURL = "originUrl";
