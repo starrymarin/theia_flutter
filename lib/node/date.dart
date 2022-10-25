@@ -25,7 +25,7 @@ class DateNode extends InlineNode {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          color: const Color(0xFF666666).withOpacity(0.26),
+          color: const Color(0xFF666666).withOpacity(0.15),
         ),
         child: Text(
           DateFormat('yyyy-MM-dd')
