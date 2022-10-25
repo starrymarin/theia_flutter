@@ -31,6 +31,8 @@ class NodeType {
   static const heading2 = "heading-two";
   static const heading3 = "heading-three";
   static const heading4 = "heading-four";
+  static const heading5 = "heading-five";
+  static const heading6 = "heading-six";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -73,6 +75,10 @@ extension NodeJsonExtension on NodeJson {
           return HeadingNode(this, Heading.heading3);
         case NodeType.heading4:
           return HeadingNode(this, Heading.heading4);
+        case NodeType.heading5:
+          return HeadingNode(this, Heading.heading5);
+        case NodeType.heading6:
+          return HeadingNode(this, Heading.heading6);
         case null:
           return null;
       }
