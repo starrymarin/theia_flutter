@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/json.dart' as node_json;
 
@@ -48,13 +49,28 @@ class ImageNode extends BlockNode {
 
   @override
   Widget build(BuildContext context) {
+    final mediaWidth = MediaQuery.of(context).size.width;
+
     return Container(
       alignment: alignment?.systemValue ?? Alignment.centerLeft,
       child: SizedBox(
-        width: width?.toDouble(),
-        height: height?.toDouble(),
+        width: fitSize(width?.toDouble(), mediaWidth),
+        height: fitSize(height?.toDouble(), mediaWidth),
         child: Image.network(thumbURL ?? ""),
       ),
     );
+  }
+
+  /// 转换 web 尺寸为设备尺寸
+  ///
+  /// webSize: web 尺寸
+  /// mediaWidth: 组件宽度
+  double fitSize(double? webSize, double mediaWidth) {
+    if ((webSize ?? 0) <= 0) {
+      return mediaWidth;
+    }
+
+    // 16 为内边距
+    return (mediaWidth - 16) / defaultWidth * (webSize ?? 0);
   }
 }
