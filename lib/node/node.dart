@@ -5,6 +5,7 @@ import 'package:theia_flutter/node/date.dart';
 import 'package:theia_flutter/node/heading.dart';
 import 'package:theia_flutter/node/inline_code.dart';
 import 'package:theia_flutter/node/label.dart';
+import 'package:theia_flutter/node/link.dart';
 import 'package:theia_flutter/node/list.dart';
 import 'package:theia_flutter/node/paragraph.dart';
 import 'package:theia_flutter/node/table.dart';
@@ -33,6 +34,7 @@ class NodeType {
   static const heading4 = "heading-four";
   static const heading5 = "heading-five";
   static const heading6 = "heading-six";
+  static const link = "link";
 }
 
 extension NodeJsonExtension on NodeJson {
@@ -79,6 +81,8 @@ extension NodeJsonExtension on NodeJson {
           return HeadingNode(this, Heading.heading5);
         case NodeType.heading6:
           return HeadingNode(this, Heading.heading6);
+        case NodeType.link:
+          return LinkNode(this);
         case null:
           return null;
       }
