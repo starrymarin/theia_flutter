@@ -8,15 +8,17 @@ enum Heading {
   heading2,
   heading3,
   heading4,
-}
+  heading5,
+  heading6;
 
-extension HeadingExtension on Heading {
   double get fontSize {
     switch (this) {
       case Heading.heading1: return 32;
       case Heading.heading2: return 28;
       case Heading.heading3: return 24;
       case Heading.heading4: return 20;
+      case Heading.heading5: return 18;
+      case Heading.heading6: return 16;
     }
   }
 }
@@ -33,11 +35,7 @@ class HeadingNode extends BlockNode {
         fontSize: heading.fontSize,
         fontWeight: FontWeight.bold,
       ),
-
       child: InlineTextField(elementNode: this),
     );
   }
-
-  @override
-  InlineSpan? buildSpan({TextStyle? textStyle}) => null;
 }
