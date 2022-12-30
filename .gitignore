@@ -2,3 +2,4 @@ build/
 .dart_tool/
 .idea/
 .packages
+theia_flutter.iml

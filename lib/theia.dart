@@ -16,7 +16,7 @@ Theia theia(BuildContext context) {
 }
 
 class Theia extends StatefulWidget {
-  const Theia({Key? key, List<NodeJson>? document, this.readOnly = false})
+  const Theia({Key? key, List<NodeJson>? document, this.readOnly = true})
       : _document = document,
         super(key: key);
 
