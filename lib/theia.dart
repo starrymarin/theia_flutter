@@ -16,9 +16,18 @@ Theia theia(BuildContext context) {
 }
 
 class Theia extends StatefulWidget {
-  const Theia({Key? key, List<NodeJson>? document, this.readOnly = true})
-      : _document = document,
-        super(key: key);
+  Theia({
+    Key? key,
+    List<NodeJson>? document,
+    this.readOnly = true,
+    List<NodePlugin>? nodePlugins,
+  })  : _document = document,
+        super(key: key) {
+    this.nodePlugins = {};
+    nodePlugins?.forEach((plugin) => {
+      this.nodePlugins[plugin.type] = plugin
+    });
+  }
 
   final List<NodeJson>? _document;
 
@@ -35,6 +44,8 @@ class Theia extends StatefulWidget {
 
   final bool readOnly;
 
+  late final Map<String, NodePlugin> nodePlugins;
+
   @override
   State<StatefulWidget> createState() => TheiaState();
 }
@@ -43,31 +54,32 @@ class TheiaState extends State<Theia> {
   @override
   Widget build(BuildContext context) {
     return _InheritedTheia(
-        theia: widget,
-        child: SelectionArea(
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: InheritedTextTheme(
-                  textStyle: const TextStyle(
-                      fontSize: defaultFontSize,
-                      color: Color(0xFF333333),
-                      height: 1.6),
-                  child: Column(
-                    children: widget.document
-                        .map((nodeJson) => nodeJson.toNode())
-                        .whereType<BlockNode>()
-                        .map((node) =>
-                            Builder(builder: (context) => node.build(context)))
-                        .whereType<Widget>()
-                        .toList(growable: false),
-                  ),
+      theia: widget,
+      child: SelectionArea(
+        child: Scrollbar(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              child: InheritedTextTheme(
+                textStyle: const TextStyle(
+                    fontSize: defaultFontSize,
+                    color: Color(0xFF333333),
+                    height: 1.6),
+                child: Column(
+                  children: widget.document
+                      .map((nodeJson) => nodeJson.toNode(widget.nodePlugins))
+                      .whereType<BlockNode>()
+                      .map((node) =>
+                          Builder(builder: (context) => node.build(context)))
+                      .whereType<Widget>()
+                      .toList(growable: false),
                 ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 

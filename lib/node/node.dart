@@ -14,6 +14,7 @@ import 'package:theia_flutter/node/table.dart';
 import 'package:theia_flutter/node/text.dart';
 
 import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/theia.dart';
 
 typedef NodeJson = Map<String, dynamic>;
 
@@ -44,58 +45,88 @@ class NodeType {
 extension NodeJsonExtension on NodeJson {
   bool isText() => containsKey(node_json.text);
 
-  Node? toNode() {
+  /// 对于NodeJson的拓展方法来说，想要实现插件功能，必须要把插件作为参数传递到函数
+  ///（为什么不可以作为顶层属性或者static属性保存？是因为希望每个theia实例可以有自己的插件）
+  Node? toNode(Map<String, NodePlugin>? nodePlugins) {
+    Node? node;
     if (isText()) {
-      return TextNode(this);
+      node = TextNode(this);
     } else {
       switch (this[node_json.type]) {
         case NodeType.paragraph:
-          return ParagraphNode(this);
+          node = ParagraphNode(this);
+          break;
         case NodeType.inlineCode:
-          return InlineCodeNode(this);
+          node = InlineCodeNode(this);
+          break;
         case NodeType.blockQuote:
-          return BlockQuoteNode(this);
+          node = BlockQuoteNode(this);
+          break;
         case NodeType.numberedList:
-          return NumberedListNode(this);
+          node = NumberedListNode(this);
+          break;
         case NodeType.bulletedList:
-          return BulletedListNode(this);
+          node = BulletedListNode(this);
+          break;
         case NodeType.listItem:
-          return ListItemNode(this);
+          node = ListItemNode(this);
+          break;
         case NodeType.checkItem:
-          return CheckItemNode(this);
+          node = CheckItemNode(this);
+          break;
         case NodeType.table:
-          return TableNode(this);
+          node = TableNode(this);
+          break;
         case NodeType.tableRow:
-          return TableRowNode(this);
+          node = TableRowNode(this);
+          break;
         case NodeType.tableCell:
-          return TableCellNode(this);
+          node = TableCellNode(this);
+          break;
         case NodeType.label:
-          return LabelNode(this);
+          node = LabelNode(this);
+          break;
         case NodeType.date:
-          return DateNode(this);
+          node = DateNode(this);
+          break;
         case NodeType.heading1:
-          return HeadingNode(this, Heading.heading1);
+          node = HeadingNode(this, Heading.heading1);
+          break;
         case NodeType.heading2:
-          return HeadingNode(this, Heading.heading2);
+          node = HeadingNode(this, Heading.heading2);
+          break;
         case NodeType.heading3:
-          return HeadingNode(this, Heading.heading3);
+          node = HeadingNode(this, Heading.heading3);
+          break;
         case NodeType.heading4:
-          return HeadingNode(this, Heading.heading4);
+          node = HeadingNode(this, Heading.heading4);
+          break;
         case NodeType.heading5:
-          return HeadingNode(this, Heading.heading5);
+          node = HeadingNode(this, Heading.heading5);
+          break;
         case NodeType.heading6:
-          return HeadingNode(this, Heading.heading6);
+          node = HeadingNode(this, Heading.heading6);
+          break;
         case NodeType.link:
-          return LinkNode(this);
+          node = LinkNode(this);
+          break;
         case NodeType.alert:
-          return AlertNode(this);
+          node = AlertNode(this);
+          break;
         case NodeType.image:
-          return ImageNode(this);
+          node = ImageNode(this);
+          break;
         case null:
-          return null;
+          node = null;
+          break;
+        default:
+          node = nodePlugins?[this[node_json.type]]?.createNode(this);
+          break;
       }
     }
-    return null;
+    // 生成node之后，把plugins保存在node中，是为了执行node.children.toNode时，可以有plugins可用
+    node?._plugins = nodePlugins;
+    return node;
   }
 }
 
@@ -104,20 +135,31 @@ abstract class Node {
 
   final NodeJson json;
 
+  Map<String, NodePlugin>? _plugins;
+
   Widget? build(BuildContext context);
 
   InlineSpan? buildSpan({TextStyle? textStyle});
 }
 
 abstract class ElementNode extends Node {
-  ElementNode(super.json) {
-    List<dynamic> nodeJsonList = json[node_json.children];
-    for (NodeJson json in nodeJsonList) {
-      var node = json.toNode();
-      if (node != null) {
-        children.add(node);
+  ElementNode(super.json);
+
+  List<Node>? _children;
+
+  // children的初始化从随着ElementNode构造一起初始化，变成第一次使用时初始化，是因为_plugins是在Node构造完毕后赋值的，参见NodeJson.toNode()
+  List<Node> get children {
+    if (_children == null) {
+      _children = [];
+      List<dynamic> nodeJsonList = json[node_json.children];
+      for (NodeJson json in nodeJsonList) {
+        var node = json.toNode(_plugins);
+        if (node != null) {
+          _children?.add(node);
+        }
       }
     }
+    return _children ?? [];
   }
 
   String? _key;
@@ -133,8 +175,6 @@ abstract class ElementNode extends Node {
     _type ??= json[node_json.type];
     return _type;
   }
-
-  List<Node> children = [];
 }
 
 abstract class BlockNode extends ElementNode {
@@ -155,4 +195,12 @@ abstract class InlineNode extends ElementNode {
 
   @override
   InlineSpan buildSpan({TextStyle? textStyle});
+}
+
+class NodePlugin {
+  NodePlugin(this.type, this.createNode);
+
+  final String type;
+
+  final Node Function(NodeJson nodeJson) createNode;
 }
