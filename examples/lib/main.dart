@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:theia_flutter/node/date.dart';
+import 'package:theia_flutter/node/internal/date.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/table.dart';
+import 'package:theia_flutter/node/internal/table.dart';
 import 'package:theia_flutter/theia.dart';
 import 'package:flutter/material.dart';
 

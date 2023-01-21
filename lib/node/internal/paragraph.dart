@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/text.dart';
 import 'package:theia_flutter/text.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/node/json.dart';
 
 class ParagraphNode extends BlockNode {
   ParagraphNode(super.json);
 
-  int get indent => json[node_json.indent] ?? 0;
+  int get indent => json[JsonKey.indent] ?? 0;
   final int _indentSize = 30;
 
   ParagraphNodeStyle? _style(BuildContext context) =>
@@ -16,7 +16,7 @@ class ParagraphNode extends BlockNode {
   String? _align;
 
   TextAlign? get align {
-    _align ??= json[node_json.align];
+    _align ??= json[JsonKey.align];
     switch (_align) {
       case "center":
         return TextAlign.center;

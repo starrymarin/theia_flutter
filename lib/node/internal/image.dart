@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/node/json.dart';
 
 enum ImageAlignment {
   left,
@@ -36,16 +36,16 @@ enum ImageAlignment {
 class ImageNode extends BlockNode {
   ImageNode(super.json);
 
-  String? get thumbURL => json[node_json.thumbURL];
+  String? get thumbURL => json[JsonKey.thumbURL];
 
-  String? get originalURL => json[node_json.originalURL];
+  String? get originalURL => json[JsonKey.originalURL];
 
-  int? get width => json[node_json.width];
+  int? get width => json[JsonKey.width];
 
-  int? get height => json[node_json.height];
+  int? get height => json[JsonKey.height];
 
   ImageAlignment? get alignment =>
-      ImageAlignment.tryParse(json[node_json.align] ?? "");
+      ImageAlignment.tryParse(json[JsonKey.align] ?? "");
 
   @override
   Widget build(BuildContext context) {

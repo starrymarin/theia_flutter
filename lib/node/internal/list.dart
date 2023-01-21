@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/paragraph.dart';
+import 'package:theia_flutter/node/internal/paragraph.dart';
 import 'package:theia_flutter/text.dart';
 
 enum ListType { numbered, bulleted }

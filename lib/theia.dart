@@ -3,8 +3,10 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/text.dart';
+
+import 'node/transform.dart';
 
 /// 基本思路是将slate的节点一一对应到flutter，所以一个theia widget里面有很多的textField，
 /// 因此在处理选区的时候是首先让flutter处理当前触摸到的TextField的选区，然后通过处理手势，
@@ -24,9 +26,7 @@ class Theia extends StatefulWidget {
   })  : _document = document,
         super(key: key) {
     this.nodePlugins = {};
-    nodePlugins?.forEach((plugin) => {
-      this.nodePlugins[plugin.type] = plugin
-    });
+    nodePlugins?.forEach((plugin) => {this.nodePlugins[plugin.type] = plugin});
   }
 
   final List<NodeJson>? _document;
@@ -35,9 +35,9 @@ class Theia extends StatefulWidget {
       _document ??
       [
         {
-          node_json.type: NodeType.paragraph,
-          node_json.children: [
-            {node_json.text: "\u200b"}
+          JsonKey.type: NodeType.paragraph,
+          JsonKey.children: [
+            {JsonKey.text: "\u200b"}
           ]
         },
       ];
@@ -62,9 +62,10 @@ class TheiaState extends State<Theia> {
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               child: InheritedTextTheme(
                 textStyle: const TextStyle(
-                    fontSize: defaultFontSize,
-                    color: Color(0xFF333333),
-                    height: 1.6),
+                  fontSize: defaultFontSize,
+                  color: Color(0xFF333333),
+                  height: 1.6,
+                ),
                 child: Column(
                   children: widget.document
                       .map((nodeJson) => nodeJson.toNode(widget.nodePlugins))

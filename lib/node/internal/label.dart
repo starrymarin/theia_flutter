@@ -1,17 +1,14 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/node/json.dart';
+import 'package:theia_flutter/utils/color.dart';
 
-class DateNode extends InlineNode {
-  DateNode(super.json);
+class LabelNode extends InlineNode {
+  LabelNode(super.json);
 
-  int get date {
-    int date = json[node_json.date] ?? 0;
+  String get label => json[JsonKey.label] ?? "";
 
-    // 时间戳可能是10位或13位
-    return date < 9999999999 ? date * 1000 : date;
-  }
+  Color? get color => json[JsonKey.color]?.toString().toColor();
 
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
@@ -25,14 +22,12 @@ class DateNode extends InlineNode {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          color: const Color(0xFF666666).withOpacity(0.15),
+          color: color?.withOpacity(0.1),
         ),
         child: Text(
-          DateFormat('yyyy-MM-dd')
-              .format(DateTime.fromMillisecondsSinceEpoch(date)),
-          style: const TextStyle(
-            color: Color(0xFF666666),
-          ),
+          label,
+          style:
+              TextStyle(color: color, textBaseline: TextBaseline.ideographic),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
-import 'package:theia_flutter/node/paragraph.dart';
+import 'package:theia_flutter/node/internal/paragraph.dart';
+import 'package:theia_flutter/node/json.dart';
 
 enum AlertType {
   success,
@@ -55,7 +55,7 @@ class AlertNode extends BlockNode {
   AlertNode(super.json);
 
   AlertType get alertType =>
-      AlertType.tryParse(json[node_json.alertType] ?? "") ?? AlertType.success;
+      AlertType.tryParse(json[JsonKey.alertType] ?? "") ?? AlertType.success;
 
   @override
   Widget build(BuildContext context) {

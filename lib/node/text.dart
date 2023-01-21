@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
 import 'package:theia_flutter/utils/color.dart';
+
+import 'json.dart';
 
 class TextNode extends Node {
   TextNode(super.json);
 
-  String get text => json[node_json.text] ?? "";
+  String get text => json[JsonKey.text] ?? "";
 
   Color? get backgroundColor =>
-      json[node_json.backgroundColor]?.toString().toColor();
+      json[JsonKey.backgroundColor]?.toString().toColor();
 
-  Color? get color => json[node_json.color]?.toString().toColor();
+  Color? get color => json[JsonKey.color]?.toString().toColor();
 
-  double? get fontSize => json[node_json.fontSize]?.toDouble();
+  double? get fontSize => json[JsonKey.fontSize]?.toDouble();
 
-  bool? get bold => json[node_json.bold];
+  bool? get bold => json[JsonKey.bold];
 
-  bool? get italic => json[node_json.italic];
+  bool? get italic => json[JsonKey.italic];
 
-  bool? get underlined => json[node_json.underlined];
+  bool? get underlined => json[JsonKey.underlined];
 
-  bool? get strikethrough => json[node_json.strikethrough];
+  bool? get strikethrough => json[JsonKey.strikethrough];
 
   @override
   Widget? build(BuildContext context) => null;

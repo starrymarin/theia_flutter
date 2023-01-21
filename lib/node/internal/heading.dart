@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 
-import '../text.dart';
+import '../../text.dart';
 
 enum Heading {
   heading1,

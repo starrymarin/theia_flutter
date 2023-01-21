@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/text.dart';
 
 class CheckItemNode extends BlockNode {
   CheckItemNode(super.json);
 
-  bool get checked => json[node_json.checked];
+  bool get checked => json[JsonKey.checked];
 
   @override
   Widget build(BuildContext context) {

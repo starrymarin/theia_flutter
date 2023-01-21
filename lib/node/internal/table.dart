@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/utils/color.dart';
 
 class TableNode extends BlockNode {
@@ -16,7 +16,7 @@ class TableNode extends BlockNode {
   List<NodeJson>? _columns;
 
   List<NodeJson> get columns {
-    _columns ??= (json[node_json.columns] as List<dynamic>)
+    _columns ??= (json[JsonKey.columns] as List<dynamic>)
         .map((element) => element as NodeJson)
         .toList();
     return _columns ?? [];
@@ -28,7 +28,7 @@ class TableNode extends BlockNode {
     _columnsWidth ??= [];
     if (columns.isNotEmpty) {
       _columnsWidth = columns
-          .map((column) => (column[node_json.width] as num).toDouble())
+          .map((column) => (column[JsonKey.width] as num).toDouble())
           .toList();
     } else {
       int columnsCount = 0;
@@ -95,14 +95,14 @@ class TableRowNode extends BlockNode {
           return Container(
             width: tableNode.columnsWidth[cellIndex],
             constraints: BoxConstraints(
-              minHeight: (json[node_json.height] as num?)?.toDouble() ?? 41,
+              minHeight: (json[JsonKey.height] as num?)?.toDouble() ?? 41,
             ),
             decoration: BoxDecoration(
               border: const Border(
                 top: BorderSide(color: Color(0xFFDDDDDD), width: 1),
                 right: BorderSide(color: Color(0xFFDDDDDD), width: 1),
               ),
-              color: (json[node_json.header] as bool?) == true
+              color: (json[JsonKey.header] as bool?) == true
                   ? const Color(0xFFF3F3F3)
                   : null,
             ),
@@ -140,7 +140,7 @@ class TableCellNode extends BlockNode {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
-      color: (json[node_json.tableCellBackgroundColor] as String?).toColor(),
+      color: (json[JsonKey.tableCellBackgroundColor] as String?).toColor(),
       child: IntrinsicHeight(
         child: Column(
           children: childrenWidgets,

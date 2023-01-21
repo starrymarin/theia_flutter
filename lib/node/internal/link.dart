@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/node/json.dart' as node_json;
+import 'package:theia_flutter/node/json.dart';
 
 class LinkNode extends InlineNode {
   LinkNode(super.json);
 
-  String get url => json[node_json.url] ?? "";
+  String get url => json[JsonKey.url] ?? "";
 
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
