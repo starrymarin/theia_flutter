@@ -124,8 +124,9 @@ extension NodeJsonExtension on NodeJson {
           break;
       }
     }
-    // 生成node之后，把plugins保存在node中，是为了执行node.children.toNode时，可以有plugins可用
-    node?._plugins = nodePlugins;
+    if (node is ElementNode) {
+      node.generateChildren(nodePlugins);
+    }
     return node;
   }
 }
@@ -134,8 +135,6 @@ abstract class Node {
   Node(this.json);
 
   final NodeJson json;
-
-  Map<String, NodePlugin>? _plugins;
 
   Widget? build(BuildContext context);
 
@@ -147,20 +146,7 @@ abstract class ElementNode extends Node {
 
   List<Node>? _children;
 
-  // children的初始化从随着ElementNode构造一起初始化，变成第一次使用时初始化，是因为_plugins是在Node构造完毕后赋值的，参见NodeJson.toNode()
-  List<Node> get children {
-    if (_children == null) {
-      _children = [];
-      List<dynamic> nodeJsonList = json[node_json.children];
-      for (NodeJson json in nodeJsonList) {
-        var node = json.toNode(_plugins);
-        if (node != null) {
-          _children?.add(node);
-        }
-      }
-    }
-    return _children ?? [];
-  }
+  List<Node> get children => _children ?? [];
 
   String? _key;
 
@@ -174,6 +160,20 @@ abstract class ElementNode extends Node {
   String? get type {
     _type ??= json[node_json.type];
     return _type;
+  }
+
+  void generateChildren(Map<String, NodePlugin>? plugins) {
+    _children = [];
+    List<dynamic> nodeJsonList = json[node_json.children];
+    for (NodeJson json in nodeJsonList) {
+      var node = json.toNode(plugins);
+      if (node != null) {
+        _children?.add(node);
+        if (node is ElementNode) {
+          node.generateChildren(plugins);
+        }
+      }
+    }
   }
 }
 
