@@ -10,7 +10,7 @@ class InlineCodeNode extends InlineNode {
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
-      child: InlineCodeTextField(elementNode: this),
+      child: InlineCodeTextField(node: this),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.baseline,
     );
@@ -18,10 +18,12 @@ class InlineCodeNode extends InlineNode {
 }
 
 class InlineCodeTextField extends InlineTextField {
-  const InlineCodeTextField({super.key, required super.elementNode});
+  const InlineCodeTextField({super.key, required super.node});
 
   @override
-  State<StatefulWidget> createState() => InlineCodeTextFieldState();
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return InlineCodeTextFieldState();
+  }
 }
 
 class InlineCodeTextFieldState extends InlineTextFieldState {

@@ -48,19 +48,21 @@ class ImageNode extends BlockNode {
       ImageAlignment.tryParse(json[JsonKey.align] ?? "");
 
   @override
-  Widget build(BuildContext context) {
-    final mediaWidth = MediaQuery.of(context).size.width;
-
-    return Container(
-      alignment: alignment?.systemValue ?? Alignment.centerLeft,
-      child: SizedBox(
-        width: fitSize(width?.toDouble(), mediaWidth),
-        height: fitSize(height?.toDouble(), mediaWidth),
-        child: Image.network(thumbURL ?? ""),
-      ),
-    );
+  NodeWidget build(BuildContext context) {
+    return ImageNodeWidget(key: key, node: this);
   }
+}
 
+class ImageNodeWidget extends NodeWidget<ImageNode> {
+  const ImageNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState createState() {
+    return ImageNodeWidgetState();
+  }
+}
+
+class ImageNodeWidgetState extends NodeWidgetState<ImageNodeWidget> {
   /// 转换 web 尺寸为设备尺寸
   ///
   /// webSize: web 尺寸
@@ -72,5 +74,19 @@ class ImageNode extends BlockNode {
 
     // 16 为内边距
     return (mediaWidth - 16) / defaultWidth * (webSize ?? 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaWidth = MediaQuery.of(context).size.width;
+
+    return Container(
+      alignment: widget.node.alignment?.systemValue ?? Alignment.centerLeft,
+      child: SizedBox(
+        width: fitSize(widget.node.width?.toDouble(), mediaWidth),
+        height: fitSize(widget.node.height?.toDouble(), mediaWidth),
+        child: Image.network(widget.node.thumbURL ?? ""),
+      ),
+    );
   }
 }

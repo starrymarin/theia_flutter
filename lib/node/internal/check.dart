@@ -6,7 +6,24 @@ import 'package:theia_flutter/text.dart';
 class CheckItemNode extends BlockNode {
   CheckItemNode(super.json);
 
-  bool get checked => json[JsonKey.checked];
+  @override
+  NodeWidget build(BuildContext context) {
+    return CheckItemNodeWidget(key: key, node: this);
+  }
+}
+
+class CheckItemNodeWidget extends NodeWidget<CheckItemNode> {
+  const CheckItemNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget> createState() {
+    return CheckItemNodeWidgetState();
+  }
+}
+
+class CheckItemNodeWidgetState extends NodeWidgetState<CheckItemNodeWidget> {
+
+  bool get checked => widget.node.json[JsonKey.checked];
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +55,7 @@ class CheckItemNode extends BlockNode {
               child: icon,
             ),
           ),
-          Expanded(child: InlineTextField(elementNode: this)),
+          Expanded(child: InlineTextField(node: widget.node)),
         ],
       ),
     );

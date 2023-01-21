@@ -29,13 +29,30 @@ class HeadingNode extends BlockNode {
   Heading heading;
 
   @override
+  NodeWidget build(BuildContext context) {
+    return HeadingNodeWidget(key: key, node: this);
+  }
+}
+
+class HeadingNodeWidget extends NodeWidget<HeadingNode> {
+  const HeadingNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget> createState() {
+    return HeadingNodeWidgetState();
+  }
+}
+
+class HeadingNodeWidgetState extends NodeWidgetState<HeadingNodeWidget> {
+  @override
   Widget build(BuildContext context) {
     return InheritedTextTheme(
       textStyle: TextStyle(
-        fontSize: heading.fontSize,
+        fontSize: widget.node.heading.fontSize,
         fontWeight: FontWeight.bold,
       ),
-      child: InlineTextField(elementNode: this),
+      child: InlineTextField(node: widget.node),
     );
   }
+
 }

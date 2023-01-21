@@ -7,16 +7,32 @@ import 'package:theia_flutter/node/json.dart';
 class ParagraphNode extends BlockNode {
   ParagraphNode(super.json);
 
-  int get indent => json[JsonKey.indent] ?? 0;
-  final int _indentSize = 30;
+  @override
+  NodeWidget build(BuildContext context) {
+    return ParagraphNodeWidget(key: key, node: this);
+  }
+}
 
-  ParagraphNodeStyle? _style(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<ParagraphNodeStyle>();
+class ParagraphNodeWidget extends NodeWidget<ParagraphNode> {
+  const ParagraphNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return ParagraphNodeWidgetState();
+  }
+
+}
+
+class ParagraphNodeWidgetState extends NodeWidgetState<ParagraphNodeWidget> {
+  List<Node> get children => widget.node.children;
+
+  int get indent => widget.node.json[JsonKey.indent] ?? 0;
+  final int _indentSize = 30;
 
   String? _align;
 
   TextAlign? get align {
-    _align ??= json[JsonKey.align];
+    _align ??= widget.node.json[JsonKey.align];
     switch (_align) {
       case "center":
         return TextAlign.center;
@@ -25,6 +41,9 @@ class ParagraphNode extends BlockNode {
     }
     return null;
   }
+
+  ParagraphNodeStyle? _style(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ParagraphNodeStyle>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,19 +63,20 @@ class ParagraphNode extends BlockNode {
       if (firstChild is InlineNode || firstChild is TextNode) {
         final style = _style(context);
         return Container(
-            margin: style?.inlineTextMargin ??
-                const EdgeInsets.fromLTRB(0, 8, 0, 8),
-            padding:
-                EdgeInsets.fromLTRB((_indentSize * indent).toDouble(), 0, 0, 0),
-            child: InheritedTextTheme(
-              textAlign: align,
-              child: InlineTextField(elementNode: this),
-            ),
+          margin: style?.inlineTextMargin ??
+              const EdgeInsets.fromLTRB(0, 8, 0, 8),
+          padding:
+          EdgeInsets.fromLTRB((_indentSize * indent).toDouble(), 0, 0, 0),
+          child: InheritedTextTheme(
+            textAlign: align,
+            child: InlineTextField(node: widget.node),
+          ),
         );
       }
     }
     return Container();
   }
+
 }
 
 class ParagraphNodeStyle extends InheritedWidget {

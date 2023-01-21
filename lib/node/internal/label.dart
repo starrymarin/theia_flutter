@@ -14,23 +14,39 @@ class LabelNode extends InlineNode {
   InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
       alignment: PlaceholderAlignment.middle,
-      child: Container(
-        margin: const EdgeInsets.all(2),
-        padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
-        constraints: const BoxConstraints(
-          maxWidth: 160,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3),
-          color: color?.withOpacity(0.1),
-        ),
-        child: Text(
-          label,
-          style:
-              TextStyle(color: color, textBaseline: TextBaseline.ideographic),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      child: LabelNodeWidget(key: key, node: this),
+    );
+  }
+}
+
+class LabelNodeWidget extends NodeWidget<LabelNode> {
+  const LabelNodeWidget({super.key, required super.node});
+
+  @override
+  NodeWidgetState createState() {
+    return LabelNodeWidgetState();
+  }
+}
+
+class LabelNodeWidgetState extends NodeWidgetState<LabelNodeWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(2),
+      padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
+      constraints: const BoxConstraints(
+        maxWidth: 160,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color: widget.node.color?.withOpacity(0.1),
+      ),
+      child: Text(
+        widget.node.label,
+        style: TextStyle(
+            color: widget.node.color, textBaseline: TextBaseline.ideographic),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

@@ -8,17 +8,33 @@ class BlockQuoteNode extends BlockNode {
   BlockQuoteNode(super.json);
 
   @override
+  NodeWidget build(BuildContext context) {
+    return BlockQuoteNodeWidget(key: key, node: this);
+  }
+}
+
+class BlockQuoteNodeWidget extends NodeWidget<BlockQuoteNode> {
+  const BlockQuoteNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget> createState() {
+    return BlockQuoteNodeWidgetState();
+  }
+}
+
+class BlockQuoteNodeWidgetState extends NodeWidgetState<BlockQuoteNodeWidget> {
+  @override
   Widget build(BuildContext context) {
     List<Widget> childrenWidgets = [];
-    for (var index = 0; index < children.length; index++) {
-      var child = children[index];
+    for (var index = 0; index < widget.node.children.length; index++) {
+      var child = widget.node.children[index];
       if (child is! BlockNode) {
         continue;
       }
       childrenWidgets.add(
         ParagraphNodeStyle(
-          inlineTextMargin:
-              EdgeInsets.fromLTRB(0, 0, 0, index < children.length - 1 ? 8 : 0),
+          inlineTextMargin: EdgeInsets.fromLTRB(
+              0, 0, 0, index < widget.node.children.length - 1 ? 8 : 0),
           child: Builder(builder: (context) => child.build(context)),
         ),
       );

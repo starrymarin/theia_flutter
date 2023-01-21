@@ -42,14 +42,33 @@ class TableNode extends BlockNode {
   }
 
   @override
+  NodeWidget build(BuildContext context) {
+    return TableNodeWidget(key: key, node: this);
+  }
+}
+
+class TableNodeWidget extends NodeWidget<TableNode> {
+  const TableNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return TableNodeWidgetState();
+  }
+}
+
+class TableNodeWidgetState extends NodeWidgetState<TableNodeWidget> {
+  List<TableRowNode> get rows => widget.node.rows;
+
+  @override
   Widget build(BuildContext context) {
     List<Widget> rowWidgets = [];
     for (int index = 0; index < rows.length; index++) {
       final row = rows[index];
+      row.tableNode = widget.node;
       rowWidgets.add(
         IntrinsicHeight(
           child: Builder(builder: (context) {
-            return row.buildByTable(context, this);
+            return row.build(context);
           }),
         ),
       );
@@ -79,6 +98,8 @@ class TableNode extends BlockNode {
 class TableRowNode extends BlockNode {
   TableRowNode(super.json);
 
+  late TableNode tableNode;
+
   List<TableCellNode>? _cells;
 
   List<TableCellNode> get cells {
@@ -86,23 +107,43 @@ class TableRowNode extends BlockNode {
     return _cells ?? [];
   }
 
-  Widget buildByTable(BuildContext context, TableNode tableNode) {
+  @override
+  NodeWidget build(BuildContext context) {
+    return TableRowNodeWidget(key: key, node: this);
+  }
+}
+
+class TableRowNodeWidget extends NodeWidget<TableRowNode> {
+  const TableRowNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return TableRowNodeWidgetState();
+  }
+}
+
+class TableRowNodeWidgetState extends NodeWidgetState<TableRowNodeWidget> {
+  List<TableCellNode> get cells => widget.node.cells;
+
+  @override
+  Widget build(BuildContext context) {
     List<Widget> cellWidgets = [];
     for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
       final cell = cells[cellIndex];
       cellWidgets.add(
         Builder(builder: (context) {
           return Container(
-            width: tableNode.columnsWidth[cellIndex],
+            width: widget.node.tableNode.columnsWidth[cellIndex],
             constraints: BoxConstraints(
-              minHeight: (json[JsonKey.height] as num?)?.toDouble() ?? 41,
+              minHeight:
+                  (widget.node.json[JsonKey.height] as num?)?.toDouble() ?? 41,
             ),
             decoration: BoxDecoration(
               border: const Border(
                 top: BorderSide(color: Color(0xFFDDDDDD), width: 1),
                 right: BorderSide(color: Color(0xFFDDDDDD), width: 1),
               ),
-              color: (json[JsonKey.header] as bool?) == true
+              color: (widget.node.json[JsonKey.header] as bool?) == true
                   ? const Color(0xFFF3F3F3)
                   : null,
             ),
@@ -116,21 +157,31 @@ class TableRowNode extends BlockNode {
       children: cellWidgets,
     );
   }
-
-  /// use [buildByTable]
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }
 
 class TableCellNode extends BlockNode {
   TableCellNode(super.json);
 
   @override
+  NodeWidget build(BuildContext context) {
+    return TableCellNodeWidget(key: key, node: this);
+  }
+}
+
+class TableCellNodeWidget extends NodeWidget<TableCellNode> {
+  const TableCellNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return TableCellNodeWidgetState();
+  }
+}
+
+class TableCellNodeWidgetState extends NodeWidgetState<TableCellNodeWidget> {
+  @override
   Widget build(BuildContext context) {
     List<Widget> childrenWidgets = [];
-    for (var child in children) {
+    for (var child in widget.node.children) {
       if (child is BlockNode) {
         childrenWidgets.add(Builder(builder: (context) {
           return child.build(context);
@@ -140,7 +191,8 @@ class TableCellNode extends BlockNode {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(8),
-      color: (json[JsonKey.tableCellBackgroundColor] as String?).toColor(),
+      color: (widget.node.json[JsonKey.tableCellBackgroundColor] as String?)
+          .toColor(),
       child: IntrinsicHeight(
         child: Column(
           children: childrenWidgets,

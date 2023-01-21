@@ -28,12 +28,12 @@ class NodeKey<T extends State<StatefulWidget>> extends GlobalKey<T> {
   }
 }
 
-abstract class Node extends ValueNotifier<NodeJson> {
-  Node(this.json) : super(json);
+abstract class Node extends ChangeNotifier {
+  Node(this.json);
 
-  final NodeJson json;
+  NodeJson json;
 
-  Widget? build(BuildContext context);
+  NodeWidget? build(BuildContext context);
 
   InlineSpan? buildSpan({TextStyle? textStyle});
 }
@@ -68,7 +68,7 @@ abstract class BlockNode extends ElementNode {
   BlockNode(super.json);
 
   @override
-  Widget build(BuildContext context);
+  NodeWidget build(BuildContext context);
 
   @override
   InlineSpan? buildSpan({TextStyle? textStyle}) => null;
@@ -78,7 +78,7 @@ abstract class InlineNode extends ElementNode {
   InlineNode(super.json);
 
   @override
-  Widget? build(BuildContext context) => null;
+  NodeWidget? build(BuildContext context) => null;
 
   @override
   InlineSpan buildSpan({TextStyle? textStyle});
@@ -90,4 +90,25 @@ class NodePlugin {
   final String type;
 
   final Node Function(NodeJson nodeJson) createNode;
+}
+
+abstract class NodeWidget<T extends Node> extends StatefulWidget {
+  const NodeWidget({super.key, required this.node});
+
+  final T node;
+
+  @override
+  NodeWidgetState createState();
+}
+
+abstract class NodeWidgetState<T extends NodeWidget> extends State<T> {
+  NodeWidgetState();
+
+  @override
+  void initState() {
+    widget.node.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
 }

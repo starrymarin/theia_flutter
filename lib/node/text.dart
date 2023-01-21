@@ -25,7 +25,7 @@ class TextNode extends Node {
   bool? get strikethrough => json[JsonKey.strikethrough];
 
   @override
-  Widget? build(BuildContext context) => null;
+  NodeWidget? build(BuildContext context) => null;
 
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {

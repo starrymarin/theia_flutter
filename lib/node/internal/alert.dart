@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/internal/paragraph.dart';
@@ -54,8 +55,27 @@ enum AlertType {
 class AlertNode extends BlockNode {
   AlertNode(super.json);
 
+  @override
+  NodeWidget build(BuildContext context) {
+    return AlterNodeWidget(key: key, node: this);
+  }
+}
+
+class AlterNodeWidget extends NodeWidget<AlertNode> {
+  const AlterNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState createState() {
+    return AlterNodeWidgetState();
+  }
+}
+
+class AlterNodeWidgetState extends NodeWidgetState<AlterNodeWidget> {
+  AlterNodeWidgetState();
+
   AlertType get alertType =>
-      AlertType.tryParse(json[JsonKey.alertType] ?? "") ?? AlertType.success;
+      AlertType.tryParse(widget.node.json[JsonKey.alertType] ?? "") ??
+      AlertType.success;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +105,7 @@ class AlertNode extends BlockNode {
               ),
             ),
           ),
-          Expanded(child: ParagraphNode(json).build(context)),
+          Expanded(child: ParagraphNode(widget.node.json).build(context)),
         ],
       ),
     );

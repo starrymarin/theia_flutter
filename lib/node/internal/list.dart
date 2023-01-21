@@ -11,18 +11,36 @@ abstract class ListNode extends BlockNode {
   ListType listType();
 
   @override
+  NodeWidget build(BuildContext context) {
+    return ListNodeWidget(key: key, node: this);
+  }
+}
+
+class ListNodeWidget extends NodeWidget<ListNode> {
+  const ListNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return ListNodeWidgetState();
+  }
+}
+
+class ListNodeWidgetState extends NodeWidgetState<ListNodeWidget> {
+  @override
   Widget build(BuildContext context) {
     List<Widget> items = [];
-    for (var index = 0; index < children.length; index++) {
-      final child = children[index];
+    for (var index = 0; index < widget.node.children.length; index++) {
+      final child = widget.node.children[index];
       if (child is! ListItemNode) {
         continue;
       }
+      child.index = index;
+      child.listType = widget.node.listType();
       items.add(ParagraphNodeStyle(
         inlineTextMargin: EdgeInsets.zero,
         child: Builder(
           builder: (context) {
-            return child.buildByListType(context, index, listType());
+            return child.build(context);
           },
         ),
       ));
@@ -52,18 +70,33 @@ class BulletedListNode extends ListNode {
 class ListItemNode extends BlockNode {
   ListItemNode(super.json);
 
-  /// use [buildByListType]
+  late int index;
+
+  late ListType listType;
+
+  @override
+  NodeWidget<Node> build(BuildContext context) {
+    return ListItemNodeWidget(key: key, node: this);
+  }
+}
+
+class ListItemNodeWidget extends NodeWidget<ListItemNode> {
+  const ListItemNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return ListItemNodeWidgetState();
+  }
+}
+
+class ListItemNodeWidgetState extends NodeWidgetState<ListItemNodeWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
-
-  Widget buildByListType(BuildContext context, int index, ListType listType) {
     var label = "";
     var labelStyle = inheritedTextStyle(context);
-    switch (listType) {
+    switch (widget.node.listType) {
       case ListType.numbered:
-        label = "${index + 1}. ";
+        label = "${widget.node.index + 1}. ";
         break;
       case ListType.bulleted:
         label = "\u2022  ";
@@ -88,11 +121,15 @@ class ListItemNode extends BlockNode {
           ),
           Expanded(
             child: Column(
-              children: children
+              children: widget.node.children
                   .whereType<BlockNode>()
-                  .map((child) => Builder(builder: (context) {
+                  .map(
+                    (child) => Builder(
+                      builder: (context) {
                         return child.build(context);
-                      }))
+                      },
+                    ),
+                  )
                   .toList(),
             ),
           )

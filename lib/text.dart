@@ -3,24 +3,23 @@ import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/text.dart';
 import 'package:theia_flutter/theia.dart';
 
-class InlineTextField extends StatefulWidget {
-  const InlineTextField({Key? key, required this.elementNode})
-      : super(key: key);
-
-  final ElementNode elementNode;
+class InlineTextField extends NodeWidget<ElementNode> {
+  const InlineTextField({super.key, required super.node});
 
   @override
-  State<StatefulWidget> createState() => InlineTextFieldState();
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return InlineTextFieldState();
+  }
 }
 
-class InlineTextFieldState extends State<InlineTextField> {
+class InlineTextFieldState extends NodeWidgetState<InlineTextField> {
   @protected
   late InlineTextEditingController editingController;
 
   @override
   void initState() {
     super.initState();
-    editingController = InlineTextEditingController(widget.elementNode);
+    editingController = InlineTextEditingController(widget.node);
   }
 
   @override
