@@ -18,8 +18,9 @@ class NodeKey<T extends State<StatefulWidget>> extends GlobalKey<T> {
   final String? _value;
 
   String get value {
-    if (_value != null) {
-      return _value!;
+    String? value = _value;
+    if (value != null) {
+      return value;
     }
     return List.generate(
       5,
@@ -32,6 +33,8 @@ abstract class Node extends ChangeNotifier {
   Node(this.json);
 
   NodeJson json;
+
+  Node? parent;
 
   NodeWidget? build(BuildContext context);
 
@@ -56,6 +59,7 @@ abstract class ElementNode extends Node {
       var node = json.toNode(plugins);
       if (node != null) {
         _children?.add(node);
+        node.parent = this;
         if (node is ElementNode) {
           node.generateChildren(plugins);
         }
