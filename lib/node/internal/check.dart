@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/json.dart';
-import 'package:theia_flutter/text.dart';
+import 'package:theia_flutter/node/text.dart';
 
 class CheckItemNode extends BlockNode {
   CheckItemNode(super.json);
@@ -55,7 +55,7 @@ class CheckItemNodeWidgetState extends NodeWidgetState<CheckItemNodeWidget> {
               child: icon,
             ),
           ),
-          Expanded(child: InlineTextField(node: widget.node)),
+          Expanded(child: InlineText(node: widget.node, key: widget.node.key)),
         ],
       ),
     );

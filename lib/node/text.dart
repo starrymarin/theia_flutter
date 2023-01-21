@@ -48,3 +48,92 @@ class TextNode extends Node {
     );
   }
 }
+
+class InlineText extends NodeWidget<ElementNode> {
+  const InlineText({required NodeKey super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return InlineTextState();
+  }
+}
+
+class InlineTextState extends NodeWidgetState<InlineText> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: Text.rich(
+        buildTextSpan(),
+        style: inheritedTextStyle(context),
+        textAlign: inheritedTextAlign(context),
+      ),
+    );
+  }
+
+  TextSpan buildTextSpan() {
+    return TextSpan(
+      children: widget.node.children
+          .map((child) => child.buildSpan())
+          .whereType<InlineSpan>()
+          .toList(growable: false),
+    );
+  }
+}
+
+TextStyle? inheritedTextStyle(BuildContext context) {
+  return _InheritedTextTheme.of(context)?.textStyle;
+}
+
+TextAlign? inheritedTextAlign(BuildContext context) {
+  return _InheritedTextTheme.of(context)?.textAlign;
+}
+
+class InheritedTextTheme extends StatelessWidget {
+  const InheritedTextTheme({
+    super.key,
+    TextStyle? textStyle,
+    TextAlign? textAlign,
+    required this.child,
+    this.inherit = true,
+  })  : _textStyle = textStyle,
+        _textAlign = textAlign;
+
+  final TextStyle? _textStyle;
+  final TextAlign? _textAlign;
+
+  final Widget child;
+
+  /// 如果为真，会合并parent的style，如果为假，则不会合并
+  final bool inherit;
+
+  @override
+  Widget build(BuildContext context) {
+    TextStyle? textStyle = _textStyle;
+    if (inherit) {
+      var ancestorTextStyle = context
+          .dependOnInheritedWidgetOfExactType<_InheritedTextTheme>()
+          ?.textStyle;
+      textStyle = ancestorTextStyle?.merge(_textStyle) ?? _textStyle;
+    }
+    return _InheritedTextTheme(textStyle, _textAlign, child);
+  }
+}
+
+class _InheritedTextTheme extends InheritedWidget {
+  static _InheritedTextTheme? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_InheritedTextTheme>();
+  }
+
+  const _InheritedTextTheme(this.textStyle, this.textAlign, Widget child)
+      : super(child: child);
+
+  final TextStyle? textStyle;
+  final TextAlign? textAlign;
+
+  @override
+  bool updateShouldNotify(covariant _InheritedTextTheme oldWidget) {
+    return oldWidget.textStyle != textStyle;
+  }
+}
+

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
-
-import '../../text.dart';
+import 'package:theia_flutter/node/text.dart';
 
 enum Heading {
   heading1,
@@ -51,7 +50,7 @@ class HeadingNodeWidgetState extends NodeWidgetState<HeadingNodeWidget> {
         fontSize: widget.node.heading.fontSize,
         fontWeight: FontWeight.bold,
       ),
-      child: InlineTextField(node: widget.node),
+      child: InlineText(node: widget.node, key: widget.node.key),
     );
   }
 

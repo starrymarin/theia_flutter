@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/internal/paragraph.dart';
-import 'package:theia_flutter/text.dart';
+import 'package:theia_flutter/node/text.dart';
 
 /// 目前认为block-quote里面只有blockNode，如果出现非BlockNode将会被忽略
 class BlockQuoteNode extends BlockNode {

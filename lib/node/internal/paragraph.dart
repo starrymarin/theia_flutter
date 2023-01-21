@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/text.dart';
-import 'package:theia_flutter/text.dart';
 import 'package:theia_flutter/node/json.dart';
 
 class ParagraphNode extends BlockNode {
@@ -69,7 +68,7 @@ class ParagraphNodeWidgetState extends NodeWidgetState<ParagraphNodeWidget> {
           EdgeInsets.fromLTRB((_indentSize * indent).toDouble(), 0, 0, 0),
           child: InheritedTextTheme(
             textAlign: align,
-            child: InlineTextField(node: widget.node),
+            child: InlineText(node: widget.node, key: widget.node.key),
           ),
         );
       }

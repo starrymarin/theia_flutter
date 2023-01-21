@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:theia_flutter/constants.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/json.dart';
-import 'package:theia_flutter/text.dart';
 
+import 'node/text.dart';
 import 'node/transform.dart';
 
 /// 基本思路是将slate的节点一一对应到flutter，所以一个theia widget里面有很多的textField，
