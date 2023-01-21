@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'transform.dart';
@@ -5,8 +7,29 @@ import 'json.dart';
 
 typedef NodeJson = Map<String, dynamic>;
 
-abstract class Node {
-  Node(this.json);
+class NodeKey<T extends State<StatefulWidget>> extends GlobalKey<T> {
+  const NodeKey({String? value})
+      : _value = value,
+        super.constructor();
+
+  static const _availableChars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
+
+  final String? _value;
+
+  String get value {
+    if (_value != null) {
+      return _value!;
+    }
+    return List.generate(
+      5,
+      (index) => _availableChars[Random().nextInt(_availableChars.length)],
+    ).join();
+  }
+}
+
+abstract class Node extends ValueNotifier<NodeJson> {
+  Node(this.json) : super(json);
 
   final NodeJson json;
 
@@ -22,19 +45,9 @@ abstract class ElementNode extends Node {
 
   List<Node> get children => _children ?? [];
 
-  String? _key;
+  late NodeKey key = NodeKey(value: json[JsonKey.key]);
 
-  String? get key {
-    _key ??= json[JsonKey.key];
-    return _key;
-  }
-
-  String? _type;
-
-  String? get type {
-    _type ??= json[JsonKey.type];
-    return _type;
-  }
+  late String? type = json[JsonKey.type];
 
   void generateChildren(Map<String, NodePlugin>? plugins) {
     _children = [];
