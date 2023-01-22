@@ -27,6 +27,18 @@ class NodeKey<T extends State<StatefulWidget>> extends GlobalKey<T> {
       (index) => _availableChars[Random().nextInt(_availableChars.length)],
     ).join();
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (runtimeType != other.runtimeType) {
+      return false;
+    }
+    return other is NodeKey<T>
+        && identical(other.value, value);
+  }
+
+  @override
+  int get hashCode => identityHashCode(value);
 }
 
 abstract class Node extends ChangeNotifier {

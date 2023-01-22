@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/utils/color.dart';
@@ -37,7 +38,9 @@ class TextNode extends Node {
       fontStyle: italic ?? false ? FontStyle.italic : textStyle?.fontStyle,
       decoration: TextDecoration.combine([
         underlined ?? false ? TextDecoration.underline : TextDecoration.none,
-        strikethrough ?? false ? TextDecoration.lineThrough : TextDecoration.none,
+        strikethrough ?? false
+            ? TextDecoration.lineThrough
+            : TextDecoration.none,
       ]),
     );
 
@@ -45,6 +48,9 @@ class TextNode extends Node {
     return TextSpan(
       text: text,
       style: style,
+      recognizer: TapGestureRecognizer()..onTap = () {
+        debugPrint("textSpan clickkkkkkkkkkkkkkkkkkkkkk");
+      },
     );
   }
 }
@@ -136,4 +142,3 @@ class _InheritedTextTheme extends InheritedWidget {
     return oldWidget.textStyle != textStyle;
   }
 }
-

@@ -55,25 +55,30 @@ class TheiaState extends State<Theia> {
   Widget build(BuildContext context) {
     return _InheritedTheia(
       theia: widget,
-      child: SelectionArea(
-        child: Scrollbar(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: InheritedTextTheme(
-                textStyle: const TextStyle(
-                  fontSize: defaultFontSize,
-                  color: Color(0xFF333333),
-                  height: 1.6,
-                ),
-                child: Column(
-                  children: widget.document
-                      .map((nodeJson) => nodeJson.toNode(widget.nodePlugins))
-                      .whereType<BlockNode>()
-                      .map((node) =>
-                          Builder(builder: (context) => node.build(context)))
-                      .whereType<Widget>()
-                      .toList(growable: false),
+      child: GestureDetector(
+        onTap: () {
+          debugPrint("theia clickkkkkkkkkkkkkkkkkkkkkkk");
+        },
+        child: SelectionArea(
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: InheritedTextTheme(
+                  textStyle: const TextStyle(
+                    fontSize: defaultFontSize,
+                    color: Color(0xFF333333),
+                    height: 1.6,
+                  ),
+                  child: Column(
+                    children: widget.document
+                        .map((nodeJson) => nodeJson.toNode(widget.nodePlugins))
+                        .whereType<BlockNode>()
+                        .map((node) =>
+                            Builder(builder: (context) => node.build(context)))
+                        .whereType<Widget>()
+                        .toList(growable: false),
+                  ),
                 ),
               ),
             ),
