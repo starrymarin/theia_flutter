@@ -49,12 +49,12 @@ class ImageNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return ImageNodeWidget(node: this);
+    return ImageNodeWidget(key:key, node: this);
   }
 }
 
 class ImageNodeWidget extends NodeWidget<ImageNode> {
-  const ImageNodeWidget({super.key, required super.node});
+  const ImageNodeWidget({required super.key, required super.node});
 
   @override
   NodeWidgetState createState() {
@@ -81,7 +81,6 @@ class ImageNodeWidgetState extends NodeWidgetState<ImageNodeWidget> {
     final mediaWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      key: nodeKey,
       alignment: widget.node.alignment?.systemValue ?? Alignment.centerLeft,
       child: SizedBox(
         width: fitSize(widget.node.width?.toDouble(), mediaWidth),

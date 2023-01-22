@@ -29,12 +29,12 @@ class HeadingNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return HeadingNodeWidget(node: this);
+    return HeadingNodeWidget(key: key, node: this);
   }
 }
 
 class HeadingNodeWidget extends NodeWidget<HeadingNode> {
-  const HeadingNodeWidget({super.key, required super.node});
+  const HeadingNodeWidget({required super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget> createState() {
@@ -46,12 +46,11 @@ class HeadingNodeWidgetState extends NodeWidgetState<HeadingNodeWidget> {
   @override
   Widget build(BuildContext context) {
     return InheritedTextTheme(
-      key: nodeKey,
       textStyle: TextStyle(
         fontSize: widget.node.heading.fontSize,
         fontWeight: FontWeight.bold,
       ),
-      child: InlineText(node: widget.node),
+      child: InlineText(children: widget.node.children),
     );
   }
 

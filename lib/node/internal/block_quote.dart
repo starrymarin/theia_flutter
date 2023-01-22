@@ -9,12 +9,12 @@ class BlockQuoteNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return BlockQuoteNodeWidget(node: this);
+    return BlockQuoteNodeWidget(key: key, node: this);
   }
 }
 
 class BlockQuoteNodeWidget extends NodeWidget<BlockQuoteNode> {
-  const BlockQuoteNodeWidget({super.key, required super.node});
+  const BlockQuoteNodeWidget({required super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget> createState() {
@@ -41,7 +41,6 @@ class BlockQuoteNodeWidgetState extends NodeWidgetState<BlockQuoteNodeWidget> {
     }
 
     return InheritedTextTheme(
-      key: nodeKey,
       textStyle: const TextStyle(color: Color(0xFF999999)),
       child: Container(
         decoration: const BoxDecoration(

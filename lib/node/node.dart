@@ -47,15 +47,31 @@ abstract class Node extends ChangeNotifier {
 
   Node? parent;
 
-  late NodeKey key = NodeKey(value: json[JsonKey.key]);
+  late NodeKey<NodeWidgetState>? key = NodeKey(value: json[JsonKey.key]);
 
   NodeWidget? build(BuildContext context);
 
   InlineSpan? buildSpan({TextStyle? textStyle});
+
+  /// 当key是null时，通过parent更新，例如TextNode，它的key为null，它不对应任何的StatefulWidget，
+  /// 而是对应TextSpan，因此不具备json更新之后更新ui的能力，所以需要通过parent更新widget
+  void update() {
+    if (key == null) {
+      parent?.update();
+    } else {
+      var state = key?.currentState;
+      if (state is NodeWidgetState) {
+        state.update();
+      }
+    }
+  }
 }
 
 abstract class ElementNode extends Node {
   ElementNode(super.json);
+
+  @override
+  NodeKey<NodeWidgetState<NodeWidget<Node>>> get key => super.key!;
 
   List<Node>? _children;
 
@@ -108,7 +124,13 @@ class NodePlugin {
 }
 
 abstract class NodeWidget<T extends Node> extends StatefulWidget {
-  const NodeWidget({super.key, required this.node});
+  const NodeWidget({
+    required NodeKey<NodeWidgetState> super.key,
+    required this.node,
+  });
+
+  @override
+  NodeKey<NodeWidgetState> get key => super.key as NodeKey<NodeWidgetState>;
 
   final T node;
 
@@ -117,15 +139,7 @@ abstract class NodeWidget<T extends Node> extends StatefulWidget {
 }
 
 abstract class NodeWidgetState<T extends NodeWidget> extends State<T> {
-  NodeWidgetState();
-
-  late NodeKey nodeKey = widget.node.key;
-
-  @override
-  void initState() {
-    widget.node.addListener(() {
-      setState(() {});
-    });
-    super.initState();
+  void update() {
+    setState(() {});
   }
 }

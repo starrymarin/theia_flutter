@@ -14,13 +14,13 @@ class LabelNode extends InlineNode {
   InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
       alignment: PlaceholderAlignment.middle,
-      child: LabelNodeWidget(node: this),
+      child: LabelNodeWidget(key: key, node: this),
     );
   }
 }
 
 class LabelNodeWidget extends NodeWidget<LabelNode> {
-  const LabelNodeWidget({super.key, required super.node});
+  const LabelNodeWidget({required super.key, required super.node});
 
   @override
   NodeWidgetState createState() {
@@ -32,7 +32,6 @@ class LabelNodeWidgetState extends NodeWidgetState<LabelNodeWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: nodeKey,
       margin: const EdgeInsets.all(2),
       padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
       constraints: const BoxConstraints(

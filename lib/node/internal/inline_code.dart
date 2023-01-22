@@ -10,23 +10,23 @@ class InlineCodeNode extends InlineNode {
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
-      child: InlineCodeTextField(node: this),
+      child: InlineCodeNodeWidget(key: key, node: this),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.baseline,
     );
   }
 }
 
-class InlineCodeTextField extends InlineText {
-  const InlineCodeTextField({super.key, required super.node});
+class InlineCodeNodeWidget extends NodeWidget<InlineNode> {
+  const InlineCodeNodeWidget({required super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {
-    return InlineCodeTextFieldState();
+    return InlineCodeNodeWidgetState();
   }
 }
 
-class InlineCodeTextFieldState extends InlineTextState {
+class InlineCodeNodeWidgetState extends NodeWidgetState<InlineCodeNodeWidget> {
   final board = const OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(4)),
     borderSide: BorderSide(
@@ -39,12 +39,16 @@ class InlineCodeTextFieldState extends InlineTextState {
   Widget build(BuildContext context) {
     const style = TextStyle(fontFamily: monospace, color: Color(0xFF666666));
     Widget content = Text.rich(
-      buildTextSpan(),
+      TextSpan(
+        children: widget.node.children
+            .map((child) => child.buildSpan())
+            .whereType<InlineSpan>()
+            .toList(growable: false),
+      ),
       style: inheritedTextStyle(context)?.merge(style) ?? style,
       maxLines: 1,
     );
     return Container(
-      key: nodeKey,
       padding: const EdgeInsets.fromLTRB(4, 4, 2, 6),
       // 本来left也应该是2，但不知为何TextField右边总是有大约2的padding
       margin: const EdgeInsets.fromLTRB(4, 4, 4, 4),

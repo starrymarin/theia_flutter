@@ -8,12 +8,12 @@ class ParagraphNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return ParagraphNodeWidget(node: this);
+    return ParagraphNodeWidget(key: key, node: this);
   }
 }
 
 class ParagraphNodeWidget extends NodeWidget<ParagraphNode> {
-  const ParagraphNodeWidget({super.key, required super.node});
+  const ParagraphNodeWidget({required super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {
@@ -55,7 +55,6 @@ class ParagraphNodeWidgetState extends NodeWidgetState<ParagraphNodeWidget> {
             .whereType<Widget>()
             .toList();
         return Column(
-          key: nodeKey,
           children: childrenWidgets,
         );
       }
@@ -63,21 +62,18 @@ class ParagraphNodeWidgetState extends NodeWidgetState<ParagraphNodeWidget> {
       if (firstChild is InlineNode || firstChild is TextNode) {
         final style = _style(context);
         return Container(
-          key: nodeKey,
           margin: style?.inlineTextMargin ??
               const EdgeInsets.fromLTRB(0, 8, 0, 8),
           padding:
           EdgeInsets.fromLTRB((_indentSize * indent).toDouble(), 0, 0, 0),
           child: InheritedTextTheme(
             textAlign: align,
-            child: InlineText(node: widget.node),
+            child: InlineText(children: widget.node.children),
           ),
         );
       }
     }
-    return Container(
-      key: nodeKey,
-    );
+    return Container();
   }
 
 }

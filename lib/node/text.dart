@@ -8,6 +8,9 @@ import 'json.dart';
 class TextNode extends Node {
   TextNode(super.json);
 
+  @override
+  NodeKey<NodeWidgetState<NodeWidget<Node>>>? get key => null;
+
   String get text => json[JsonKey.text] ?? "";
 
   Color? get backgroundColor =>
@@ -48,23 +51,29 @@ class TextNode extends Node {
     return TextSpan(
       text: text,
       style: style,
-      // recognizer: TapGestureRecognizer()..onTap = () {
-      //   debugPrint("textSpan clickkkkkkkkkkkkkkkkkkkkkk");
-      // },
+      recognizer: TapGestureRecognizer()..onTap = () {
+        // json[JsonKey.text] = "12345678";
+        // update();
+      },
     );
   }
 }
 
-class InlineText extends NodeWidget<ElementNode> {
-  const InlineText({super.key, required super.node});
+/// InlineText不具备通过Node更新的能力，因为InlineText不对应具体Node，它的作用是用来显示TextSpan
+class InlineText extends StatelessWidget {
+  const InlineText({super.key, required this.children});
 
-  @override
-  NodeWidgetState<NodeWidget<Node>> createState() {
-    return InlineTextState();
+  final List<Node> children;
+
+  TextSpan buildTextSpan() {
+    return TextSpan(
+      children: children
+          .map((child) => child.buildSpan())
+          .whereType<InlineSpan>()
+          .toList(growable: false),
+    );
   }
-}
 
-class InlineTextState extends NodeWidgetState<InlineText> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -74,15 +83,6 @@ class InlineTextState extends NodeWidgetState<InlineText> {
         style: inheritedTextStyle(context),
         textAlign: inheritedTextAlign(context),
       ),
-    );
-  }
-
-  TextSpan buildTextSpan() {
-    return TextSpan(
-      children: widget.node.children
-          .map((child) => child.buildSpan())
-          .whereType<InlineSpan>()
-          .toList(growable: false),
     );
   }
 }

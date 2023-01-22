@@ -8,12 +8,12 @@ class CheckItemNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return CheckItemNodeWidget(node: this);
+    return CheckItemNodeWidget(key: key, node: this);
   }
 }
 
 class CheckItemNodeWidget extends NodeWidget<CheckItemNode> {
-  const CheckItemNodeWidget({super.key, required super.node});
+  const CheckItemNodeWidget({required super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget> createState() {
@@ -42,7 +42,6 @@ class CheckItemNodeWidgetState extends NodeWidgetState<CheckItemNodeWidget> {
       );
     }
     return Container(
-      key: nodeKey,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -56,7 +55,7 @@ class CheckItemNodeWidgetState extends NodeWidgetState<CheckItemNodeWidget> {
               child: icon,
             ),
           ),
-          Expanded(child: InlineText(node: widget.node)),
+          Expanded(child: InlineText(children: widget.node.children)),
         ],
       ),
     );
