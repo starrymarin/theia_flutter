@@ -48,15 +48,15 @@ class TextNode extends Node {
     return TextSpan(
       text: text,
       style: style,
-      recognizer: TapGestureRecognizer()..onTap = () {
-        debugPrint("textSpan clickkkkkkkkkkkkkkkkkkkkkk");
-      },
+      // recognizer: TapGestureRecognizer()..onTap = () {
+      //   debugPrint("textSpan clickkkkkkkkkkkkkkkkkkkkkk");
+      // },
     );
   }
 }
 
 class InlineText extends NodeWidget<ElementNode> {
-  const InlineText({required NodeKey super.key, required super.node});
+  const InlineText({super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {

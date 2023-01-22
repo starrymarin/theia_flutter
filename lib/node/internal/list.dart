@@ -12,12 +12,12 @@ abstract class ListNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return ListNodeWidget(key: key, node: this);
+    return ListNodeWidget(node: this);
   }
 }
 
 class ListNodeWidget extends NodeWidget<ListNode> {
-  const ListNodeWidget({required super.key, required super.node});
+  const ListNodeWidget({super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {
@@ -47,6 +47,7 @@ class ListNodeWidgetState extends NodeWidgetState<ListNodeWidget> {
     }
 
     return Container(
+      key: nodeKey,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
       child: Column(children: items),
     );
@@ -76,12 +77,12 @@ class ListItemNode extends BlockNode {
 
   @override
   NodeWidget<Node> build(BuildContext context) {
-    return ListItemNodeWidget(key: key, node: this);
+    return ListItemNodeWidget(node: this);
   }
 }
 
 class ListItemNodeWidget extends NodeWidget<ListItemNode> {
-  const ListItemNodeWidget({required super.key, required super.node});
+  const ListItemNodeWidget({super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {
@@ -105,6 +106,7 @@ class ListItemNodeWidgetState extends NodeWidgetState<ListItemNodeWidget> {
         break;
     }
     return Container(
+      key: nodeKey,
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.baseline,

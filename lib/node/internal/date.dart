@@ -10,13 +10,13 @@ class DateNode extends InlineNode {
   InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
       alignment: PlaceholderAlignment.middle,
-      child: DateNodeWidget(key: key, node: this),
+      child: DateNodeWidget(node: this),
     );
   }
 }
 
 class DateNodeWidget extends NodeWidget<DateNode> {
-  const DateNodeWidget({required super.key, required super.node});
+  const DateNodeWidget({super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget> createState() {
@@ -35,6 +35,7 @@ class DateNodeWidgetState extends NodeWidgetState<DateNodeWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: nodeKey,
       margin: const EdgeInsets.all(2),
       padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
       constraints: const BoxConstraints(

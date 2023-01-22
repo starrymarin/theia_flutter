@@ -14,7 +14,7 @@ class LabelNode extends InlineNode {
   InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
       alignment: PlaceholderAlignment.middle,
-      child: LabelNodeWidget(key: key, node: this),
+      child: LabelNodeWidget(node: this),
     );
   }
 }
@@ -32,6 +32,7 @@ class LabelNodeWidgetState extends NodeWidgetState<LabelNodeWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: nodeKey,
       margin: const EdgeInsets.all(2),
       padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
       constraints: const BoxConstraints(

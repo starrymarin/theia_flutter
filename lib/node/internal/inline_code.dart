@@ -10,7 +10,7 @@ class InlineCodeNode extends InlineNode {
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
     return WidgetSpan(
-      child: InlineCodeTextField(key: key, node: this),
+      child: InlineCodeTextField(node: this),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.baseline,
     );
@@ -18,7 +18,7 @@ class InlineCodeNode extends InlineNode {
 }
 
 class InlineCodeTextField extends InlineText {
-  const InlineCodeTextField({required super.key, required super.node});
+  const InlineCodeTextField({super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {
@@ -44,6 +44,7 @@ class InlineCodeTextFieldState extends InlineTextState {
       maxLines: 1,
     );
     return Container(
+      key: nodeKey,
       padding: const EdgeInsets.fromLTRB(4, 4, 2, 6),
       // 本来left也应该是2，但不知为何TextField右边总是有大约2的padding
       margin: const EdgeInsets.fromLTRB(4, 4, 4, 4),

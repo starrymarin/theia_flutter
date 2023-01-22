@@ -43,12 +43,12 @@ class TableNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return TableNodeWidget(key: key, node: this);
+    return TableNodeWidget(node: this);
   }
 }
 
 class TableNodeWidget extends NodeWidget<TableNode> {
-  const TableNodeWidget({required super.key, required super.node});
+  const TableNodeWidget({super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {
@@ -74,6 +74,7 @@ class TableNodeWidgetState extends NodeWidgetState<TableNodeWidget> {
       );
     }
     return Center(
+      key: nodeKey,
       child: Container(
         margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
         child: Scrollbar(
@@ -109,12 +110,12 @@ class TableRowNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return TableRowNodeWidget(key: key, node: this);
+    return TableRowNodeWidget(node: this);
   }
 }
 
 class TableRowNodeWidget extends NodeWidget<TableRowNode> {
-  const TableRowNodeWidget({required super.key, required super.node});
+  const TableRowNodeWidget({super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {
@@ -153,6 +154,7 @@ class TableRowNodeWidgetState extends NodeWidgetState<TableRowNodeWidget> {
       );
     }
     return Row(
+      key: nodeKey,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: cellWidgets,
     );
@@ -164,12 +166,12 @@ class TableCellNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return TableCellNodeWidget(key: key, node: this);
+    return TableCellNodeWidget(node: this);
   }
 }
 
 class TableCellNodeWidget extends NodeWidget<TableCellNode> {
-  const TableCellNodeWidget({required super.key, required super.node});
+  const TableCellNodeWidget({super.key, required super.node});
 
   @override
   NodeWidgetState<NodeWidget<Node>> createState() {
@@ -189,6 +191,7 @@ class TableCellNodeWidgetState extends NodeWidgetState<TableCellNodeWidget> {
       }
     }
     return Container(
+      key: nodeKey,
       width: double.infinity,
       padding: const EdgeInsets.all(8),
       color: (widget.node.json[JsonKey.tableCellBackgroundColor] as String?)

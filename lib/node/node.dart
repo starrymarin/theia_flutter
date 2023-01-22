@@ -33,8 +33,7 @@ class NodeKey<T extends State<StatefulWidget>> extends GlobalKey<T> {
     if (runtimeType != other.runtimeType) {
       return false;
     }
-    return other is NodeKey<T>
-        && identical(other.value, value);
+    return other is NodeKey<T> && identical(other.value, value);
   }
 
   @override
@@ -48,6 +47,8 @@ abstract class Node extends ChangeNotifier {
 
   Node? parent;
 
+  late NodeKey key = NodeKey(value: json[JsonKey.key]);
+
   NodeWidget? build(BuildContext context);
 
   InlineSpan? buildSpan({TextStyle? textStyle});
@@ -59,8 +60,6 @@ abstract class ElementNode extends Node {
   List<Node>? _children;
 
   List<Node> get children => _children ?? [];
-
-  late NodeKey key = NodeKey(value: json[JsonKey.key]);
 
   late String? type = json[JsonKey.type];
 
@@ -119,6 +118,8 @@ abstract class NodeWidget<T extends Node> extends StatefulWidget {
 
 abstract class NodeWidgetState<T extends NodeWidget> extends State<T> {
   NodeWidgetState();
+
+  late NodeKey nodeKey = widget.node.key;
 
   @override
   void initState() {

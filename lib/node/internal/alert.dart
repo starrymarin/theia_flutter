@@ -57,12 +57,12 @@ class AlertNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return AlterNodeWidget(key: key, node: this);
+    return AlterNodeWidget(node: this);
   }
 }
 
 class AlterNodeWidget extends NodeWidget<AlertNode> {
-  const AlterNodeWidget({required super.key, required super.node});
+  const AlterNodeWidget({super.key, required super.node});
 
   @override
   NodeWidgetState createState() {
@@ -80,6 +80,7 @@ class AlterNodeWidgetState extends NodeWidgetState<AlterNodeWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: nodeKey,
       decoration: BoxDecoration(
         color: alertType.color.withOpacity(0.2),
         borderRadius: BorderRadius.circular(6),
@@ -105,7 +106,13 @@ class AlterNodeWidgetState extends NodeWidgetState<AlterNodeWidget> {
               ),
             ),
           ),
-          Expanded(child: ParagraphNode(widget.node.json).build(context)),
+          Expanded(
+            child: Column(
+              children: widget.node.children
+                  .map((node) => ParagraphNode(node.json).build(context))
+                  .toList(),
+            ),
+          ),
         ],
       ),
     );
