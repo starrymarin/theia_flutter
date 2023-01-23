@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/node/node.dart';
+import 'package:theia_flutter/theia.dart';
 import 'package:theia_flutter/utils/color.dart';
 
 import 'json.dart';
@@ -45,14 +46,56 @@ class TextNode extends Node implements SpanNode {
     );
 
     TextStyle style = textStyle?.merge(newStyle) ?? newStyle;
-    return TextSpan(
+    return StyledTextSpan(
+      node: this,
       text: text,
       style: style,
-      recognizer: TapGestureRecognizer()..onTap = () {
-        // json[JsonKey.text] = "12345678";
-        // update();
-      },
     );
+  }
+}
+
+/// 这是一个"接近纯文本"的风格化TextSpan，意思是[text]有什么就显示什么，只是添加了粗体、
+/// 斜体、字号、颜色等等简单样式，目的是[text]作为纯文本可以传输给TextEditingValue
+class StyledTextSpan extends TextSpan {
+  StyledTextSpan({
+    required this.node,
+    super.text,
+    super.children,
+    super.style,
+    super.mouseCursor,
+    super.onEnter,
+    super.onExit,
+    super.semanticsLabel,
+    super.locale,
+    super.spellOut,
+  }) : super(recognizer: TapGestureRecognizer()) {
+    if (recognizer is TapGestureRecognizer) {
+      (recognizer as TapGestureRecognizer)
+          ..onTapDown = _onTapDown
+          ..onTap = _onTap;
+    }
+  }
+
+  final TextNode node;
+
+  BuildContext? get _context => node.key?.currentContext;
+
+  late final Theia? _theia = () {
+    if (_context != null) {
+      return theia(_context!);
+    }
+    return null;
+  }();
+
+  void _onTapDown(TapDownDetails details) {
+
+  }
+
+  void _onTap() {
+    Theia? theia = _theia;
+    if (theia == null) {
+      return;
+    }
   }
 }
 
