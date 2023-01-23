@@ -1,10 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/node/node.dart';
-import 'package:theia_flutter/theia.dart';
 import 'package:theia_flutter/utils/color.dart';
-
-import 'json.dart';
 
 class TextNode extends Node implements SpanNode {
   TextNode(super.json);
@@ -30,7 +29,7 @@ class TextNode extends Node implements SpanNode {
   bool? get strikethrough => json[JsonKey.strikethrough];
 
   @override
-  InlineSpan buildSpan({TextStyle? textStyle}) {
+  StyledTextSpan buildSpan({TextStyle? textStyle}) {
     TextStyle newStyle = TextStyle(
       backgroundColor: backgroundColor,
       color: color,
@@ -68,34 +67,102 @@ class StyledTextSpan extends TextSpan {
     super.semanticsLabel,
     super.locale,
     super.spellOut,
-  }) : super(recognizer: TapGestureRecognizer()) {
-    if (recognizer is TapGestureRecognizer) {
-      (recognizer as TapGestureRecognizer)
-          ..onTapDown = _onTapDown
-          ..onTap = _onTap;
-    }
-  }
+  }) : super(recognizer: StyledTextSpanTapRecognizer(node: node, text: text));
+
+  final TextNode node;
+}
+
+class StyledTextSpanTapRecognizer extends TapGestureRecognizer {
+  StyledTextSpanTapRecognizer({required this.node, required this.text});
 
   final TextNode node;
 
-  BuildContext? get _context => node.key?.currentContext;
+  final String? text;
 
-  late final Theia? _theia = () {
-    if (_context != null) {
-      return theia(_context!);
+  late final BuildContext? _context = () {
+    NodeKey? nodeKey = node.key;
+    while (nodeKey == null) {
+      Node? parent = node.parent;
+      if (parent == null) {
+        return null;
+      } else {
+        nodeKey = parent.key;
+      }
     }
-    return null;
+    return nodeKey.currentContext;
   }();
 
-  void _onTapDown(TapDownDetails details) {
+  late final RenderParagraph? _paragraph = () {
+    BuildContext? context = _context;
+    if (context == null) {
+      return null;
+    } else {
+      return _findRenderParagraph(context);
+    }
+  }();
 
+  TapDownDetails? _downDetails;
+
+  RenderParagraph? _findRenderParagraph(BuildContext context) {
+    RenderParagraph? paragraph;
+    context.visitChildElements((element) {
+      RenderObject? renderObject = element.renderObject;
+      if (renderObject is RenderParagraph) {
+        paragraph = renderObject;
+      } else {
+        paragraph = _findRenderParagraph(element);
+      }
+    });
+    return paragraph;
+  }
+
+  @override
+  GestureTapDownCallback? get onTapDown => _onTapDown;
+
+  @override
+  GestureTapCallback? get onTap => _onTap;
+
+  void _onTapDown(TapDownDetails downDetails) {
+    _downDetails = downDetails;
   }
 
   void _onTap() {
-    Theia? theia = _theia;
-    if (theia == null) {
+    RenderParagraph? paragraph = _paragraph;
+    if (paragraph == null) {
       return;
     }
+
+    TapDownDetails? downDetails = _downDetails;
+    if (downDetails == null) {
+      return;
+    }
+
+    TextPosition positionInParagraph =
+        paragraph.getPositionForOffset(downDetails.localPosition);
+    int preLength = 0;
+    paragraph.text.visitChildren((span) {
+      int spanLength = 0;
+      if (span is TextSpan) {
+        spanLength = span.text?.length ?? 0;
+      } else if (span is PlaceholderSpan) {
+        spanLength = 1;
+      }
+      int newLength = preLength + spanLength;
+      if (newLength >= positionInParagraph.offset) {
+        if (positionInParagraph.affinity == TextAffinity.downstream &&
+            newLength == positionInParagraph.offset) {
+          preLength = newLength;
+        }
+        return false;
+      }
+      preLength = newLength;
+      return true;
+    });
+    TextPosition positionInSpan = TextPosition(
+      offset: positionInParagraph.offset - preLength,
+      affinity: positionInParagraph.affinity,
+    );
+    debugPrint("$positionInSpan");
   }
 }
 

@@ -1,9 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-import 'transform.dart';
-import 'json.dart';
+import 'package:theia_flutter/node/json.dart';
+import 'package:theia_flutter/node/transform.dart';
 
 typedef NodeJson = Map<String, dynamic>;
 
