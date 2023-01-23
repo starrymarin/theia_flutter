@@ -7,8 +7,8 @@ class DateNode extends InlineNode {
   DateNode(super.json);
 
   @override
-  InlineSpan buildSpan({TextStyle? textStyle}) {
-    return WidgetSpan(
+  NodeWidgetSpan buildSpan({TextStyle? textStyle}) {
+    return NodeWidgetSpan(
       alignment: PlaceholderAlignment.middle,
       child: DateNodeWidget(key: key, node: this),
     );

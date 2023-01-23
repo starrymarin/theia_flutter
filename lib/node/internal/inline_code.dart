@@ -8,8 +8,8 @@ class InlineCodeNode extends InlineNode {
   InlineCodeNode(super.json);
 
   @override
-  InlineSpan buildSpan({TextStyle? textStyle}) {
-    return WidgetSpan(
+  NodeWidgetSpan buildSpan({TextStyle? textStyle}) {
+    return NodeWidgetSpan(
       child: InlineCodeNodeWidget(key: key, node: this),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.baseline,
@@ -41,8 +41,8 @@ class InlineCodeNodeWidgetState extends NodeWidgetState<InlineCodeNodeWidget> {
     Widget content = Text.rich(
       TextSpan(
         children: widget.node.children
+            .whereType<SpanNode>()
             .map((child) => child.buildSpan())
-            .whereType<InlineSpan>()
             .toList(growable: false),
       ),
       style: inheritedTextStyle(context)?.merge(style) ?? style,

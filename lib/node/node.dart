@@ -40,21 +40,33 @@ class NodeKey<T extends State<StatefulWidget>> extends GlobalKey<T> {
   int get hashCode => identityHashCode(value);
 }
 
-abstract class Node extends ChangeNotifier {
+abstract class WidgetNode {
+  NodeWidget build(BuildContext context);
+}
+
+abstract class SpanNode {
+  InlineSpan buildSpan({TextStyle? textStyle});
+}
+
+/// 在编辑的过程中，先更新[Node.json]，然后调用[update]方法，便可以更新对应的
+/// StatefulWidget
+abstract class Node {
   Node(this.json);
 
   NodeJson json;
 
   Node? parent;
 
+  /// 这是一个GlobalKey，需要在[WidgetNode.build]或者[InlineNode.buildSpan]生成
+  /// widget时将key指定为这个值
+  ///
+  /// key可以为null，为null时表示没有对应的StatefulWidget，不具备更新的能力。
+  /// *如果不为null，则必须要有与之对应的StatefulWidget*
   late NodeKey<NodeWidgetState>? key = NodeKey(value: json[JsonKey.key]);
 
-  NodeWidget? build(BuildContext context);
-
-  InlineSpan? buildSpan({TextStyle? textStyle});
-
-  /// 当key是null时，通过parent更新，例如TextNode，它的key为null，它不对应任何的StatefulWidget，
-  /// 而是对应TextSpan，因此不具备json更新之后更新ui的能力，所以需要通过parent更新widget
+  /// 当key是null时，通过parent更新，例如TextNode，它的key为null，它不对应任何的
+  /// StatefulWidget，而是对应TextSpan，因此不具备json更新之后更新ui的能力，所以需要通过
+  /// parent更新widget
   void update() {
     if (key == null) {
       parent?.update();
@@ -95,24 +107,15 @@ abstract class ElementNode extends Node {
   }
 }
 
-abstract class BlockNode extends ElementNode {
+abstract class BlockNode extends ElementNode implements WidgetNode {
   BlockNode(super.json);
-
-  @override
-  NodeWidget build(BuildContext context);
-
-  @override
-  InlineSpan? buildSpan({TextStyle? textStyle}) => null;
 }
 
-abstract class InlineNode extends ElementNode {
+abstract class InlineNode extends ElementNode implements SpanNode {
   InlineNode(super.json);
 
   @override
-  NodeWidget? build(BuildContext context) => null;
-
-  @override
-  InlineSpan buildSpan({TextStyle? textStyle});
+  NodeWidgetSpan buildSpan({TextStyle? textStyle});
 }
 
 class NodePlugin {
@@ -142,4 +145,13 @@ abstract class NodeWidgetState<T extends NodeWidget> extends State<T> {
   void update() {
     setState(() {});
   }
+}
+
+class NodeWidgetSpan extends WidgetSpan {
+  const NodeWidgetSpan({
+    required NodeWidget super.child,
+    super.alignment,
+    super.baseline,
+    super.style,
+  });
 }

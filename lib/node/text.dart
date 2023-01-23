@@ -5,7 +5,7 @@ import 'package:theia_flutter/utils/color.dart';
 
 import 'json.dart';
 
-class TextNode extends Node {
+class TextNode extends Node implements SpanNode {
   TextNode(super.json);
 
   @override
@@ -27,9 +27,6 @@ class TextNode extends Node {
   bool? get underlined => json[JsonKey.underlined];
 
   bool? get strikethrough => json[JsonKey.strikethrough];
-
-  @override
-  NodeWidget? build(BuildContext context) => null;
 
   @override
   InlineSpan buildSpan({TextStyle? textStyle}) {
@@ -68,8 +65,8 @@ class InlineText extends StatelessWidget {
   TextSpan buildTextSpan() {
     return TextSpan(
       children: children
+          .whereType<SpanNode>()
           .map((child) => child.buildSpan())
-          .whereType<InlineSpan>()
           .toList(growable: false),
     );
   }

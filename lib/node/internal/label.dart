@@ -11,8 +11,8 @@ class LabelNode extends InlineNode {
   Color? get color => json[JsonKey.color]?.toString().toColor();
 
   @override
-  InlineSpan buildSpan({TextStyle? textStyle}) {
-    return WidgetSpan(
+  NodeWidgetSpan buildSpan({TextStyle? textStyle}) {
+    return NodeWidgetSpan(
       alignment: PlaceholderAlignment.middle,
       child: LabelNodeWidget(key: key, node: this),
     );

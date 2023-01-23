@@ -8,13 +8,30 @@ class LinkNode extends InlineNode {
   String get url => json[JsonKey.url] ?? "";
 
   @override
-  InlineSpan buildSpan({TextStyle? textStyle}) {
-    return TextSpan(
-      style: const TextStyle(color: Color(0xFF6698FF)),
-      children: children
-          .map((child) => child.buildSpan(textStyle: textStyle))
-          .whereType<InlineSpan>()
-          .toList(),
+  NodeWidgetSpan buildSpan({TextStyle? textStyle}) {
+    return NodeWidgetSpan(
+      child: LinkNodeWidget(key: key, node: this),
     );
+  }
+}
+
+class LinkNodeWidget extends NodeWidget<LinkNode> {
+  const LinkNodeWidget({required super.key, required super.node});
+
+  @override
+  NodeWidgetState<NodeWidget<Node>> createState() {
+    return LinkNodeWidgetState();
+  }
+}
+
+class LinkNodeWidgetState extends NodeWidgetState<LinkNodeWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(TextSpan(
+        style: const TextStyle(color: Color(0xFF6698FF)),
+        children: widget.node.children
+            .whereType<SpanNode>()
+            .map((child) => child.buildSpan())
+            .toList()));
   }
 }
