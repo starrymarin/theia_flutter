@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/node/node.dart';
+import 'package:theia_flutter/theia.dart';
 import 'package:theia_flutter/utils/color.dart';
 
 class TextNode extends Node implements SpanNode {
@@ -67,13 +68,13 @@ class StyledTextSpan extends TextSpan {
     super.semanticsLabel,
     super.locale,
     super.spellOut,
-  }) : super(recognizer: StyledTextSpanTapRecognizer(node: node, text: text));
+  }) : super(recognizer: StyledTextTapRecognizer(node: node, text: text));
 
   final TextNode node;
 }
 
-class StyledTextSpanTapRecognizer extends TapGestureRecognizer {
-  StyledTextSpanTapRecognizer({required this.node, required this.text});
+class StyledTextTapRecognizer extends TapGestureRecognizer {
+  StyledTextTapRecognizer({required this.node, required this.text});
 
   final TextNode node;
 
@@ -162,7 +163,22 @@ class StyledTextSpanTapRecognizer extends TapGestureRecognizer {
       offset: positionInParagraph.offset - preLength,
       affinity: positionInParagraph.affinity,
     );
-    debugPrint("$positionInSpan");
+
+    BuildContext? context = _context;
+    if (context == null) {
+      return;
+    }
+    State? state = theiaConfiguration(context).theiaKey.currentState;
+    if (state is TheiaState) {
+      state
+        ..showKeyboard(node)
+        ..setEditingState(
+          TextEditingValue(
+            text: text ?? "",
+            selection: TextSelection.fromPosition(positionInSpan),
+          )
+        );
+    }
   }
 }
 
