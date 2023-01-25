@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:theia_flutter/constants.dart';
+import 'package:theia_flutter/edit/text_input_client.dart';
 import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/text.dart';
@@ -8,6 +8,14 @@ import 'package:theia_flutter/node/transform.dart';
 
 TheiaConfiguration theiaConfiguration(BuildContext context) {
   return TheiaConfiguration.of(context);
+}
+
+TheiaState? theiaState(BuildContext context) {
+  State? state = theiaConfiguration(context)._theiaKey.currentState;
+  if (state is TheiaState) {
+    return state;
+  }
+  return null;
 }
 
 class Theia extends StatefulWidget {
@@ -78,14 +86,11 @@ class _Theia extends StatefulWidget {
 }
 
 class TheiaState extends State<_Theia> {
-  final _TheiaTextInputClient _textInputClient = _TheiaTextInputClient();
+  TheiaTextInputClient? _currentTextInputClient;
 
-  void showKeyboard(TextNode textNode) {
-    _textInputClient._showKeyboard(textNode);
-  }
-
-  void setEditingState(TextEditingValue value) {
-    _textInputClient._setEditingState(value);
+  void useTextInputClient(TheiaTextInputClient textInputClient) {
+    _currentTextInputClient?.closeConnection();
+    _currentTextInputClient = textInputClient;
   }
 
   @override
@@ -94,7 +99,7 @@ class TheiaState extends State<_Theia> {
       child: NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollNotification) {
           if (scrollNotification is UserScrollNotification) {
-            _textInputClient.connectionClosed();
+            _currentTextInputClient?.connectionClosed();
           }
           return false;
         },
@@ -134,75 +139,16 @@ class TheiaConfiguration extends InheritedWidget {
   const TheiaConfiguration({
     super.key,
     required this.readOnly,
-    required this.theiaKey,
+    required GlobalKey theiaKey,
     required super.child,
-  });
+  }) : _theiaKey = theiaKey;
 
   final bool readOnly;
 
-  final GlobalKey theiaKey;
+  final GlobalKey _theiaKey;
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
     return false;
   }
-}
-
-class _TheiaTextInputClient with TextInputClient {
-  TextInputConnection? _textInputConnection;
-  TextEditingValue? _textEditingValue;
-  TextNode? _editingTextNode;
-
-  void _openTextInputConnect() {
-    TextInput.ensureInitialized();
-    _textInputConnection = TextInput.attach(
-      this,
-      const TextInputConfiguration(),
-    );
-  }
-
-  void _showKeyboard(TextNode textNode) {
-    if (_textInputConnection == null) {
-      _openTextInputConnect();
-    }
-    _textInputConnection?.show();
-    _editingTextNode = textNode;
-  }
-
-  void _setEditingState(TextEditingValue value) {
-    _textEditingValue = value;
-    _textInputConnection?.setEditingState(value);
-  }
-
-  @override
-  void connectionClosed() {
-    _textInputConnection?.close();
-    _textInputConnection = null;
-    _editingTextNode = null;
-  }
-
-  @override
-  AutofillScope? get currentAutofillScope => null;
-
-  @override
-  TextEditingValue? get currentTextEditingValue => _textEditingValue;
-
-  @override
-  void performAction(TextInputAction action) {}
-
-  @override
-  void performPrivateCommand(String action, Map<String, dynamic> data) {}
-
-  @override
-  void showAutocorrectionPromptRect(int start, int end) {}
-
-  @override
-  void updateEditingValue(TextEditingValue value) {
-    _textEditingValue = value;
-    _editingTextNode?.json[JsonKey.text] = value.text;
-    _editingTextNode?.update();
-  }
-
-  @override
-  void updateFloatingCursor(RawFloatingCursorPoint point) {}
 }

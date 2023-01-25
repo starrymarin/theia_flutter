@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:theia_flutter/edit/text_input_client.dart';
 import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/theia.dart';
@@ -168,17 +169,29 @@ class StyledTextTapRecognizer extends TapGestureRecognizer {
     if (context == null) {
       return;
     }
-    State? state = theiaConfiguration(context).theiaKey.currentState;
-    if (state is TheiaState) {
-      state
-        ..showKeyboard(node)
-        ..setEditingState(
-          TextEditingValue(
-            text: text ?? "",
-            selection: TextSelection.fromPosition(positionInSpan),
-          )
-        );
+    TheiaState? state = theiaState(context);
+    if (state == null) {
+      return;
     }
+    state.useTextInputClient(StyledSpanInputClient(
+      TextEditingValue(
+        text: node.text,
+        selection: TextSelection.fromPosition(positionInSpan),
+      ),
+      node: node,
+    ));
+  }
+}
+
+class StyledSpanInputClient extends TheiaTextInputClient {
+  StyledSpanInputClient(super.value, {required this.node});
+
+  final TextNode node;
+
+  @override
+  void update(TextEditingValue value) {
+    node.json[JsonKey.text] = value.text;
+    node.update();
   }
 }
 
