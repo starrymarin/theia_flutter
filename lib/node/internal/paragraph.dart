@@ -8,7 +8,7 @@ class ParagraphNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return ParagraphNodeWidget(key: key, node: this);
+    return ParagraphNodeWidget(key: nodeKey, node: this);
   }
 }
 

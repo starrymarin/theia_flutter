@@ -49,7 +49,7 @@ class ImageNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return ImageNodeWidget(key:key, node: this);
+    return ImageNodeWidget(key:nodeKey, node: this);
   }
 }
 

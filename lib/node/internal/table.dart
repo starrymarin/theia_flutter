@@ -43,7 +43,7 @@ class TableNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return TableNodeWidget(key: key, node: this);
+    return TableNodeWidget(key: nodeKey, node: this);
   }
 }
 
@@ -109,7 +109,7 @@ class TableRowNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return TableRowNodeWidget(key: key, node: this);
+    return TableRowNodeWidget(key: nodeKey, node: this);
   }
 }
 
@@ -164,7 +164,7 @@ class TableCellNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return TableCellNodeWidget(key: key, node: this);
+    return TableCellNodeWidget(key: nodeKey, node: this);
   }
 }
 

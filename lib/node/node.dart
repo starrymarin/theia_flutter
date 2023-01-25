@@ -56,21 +56,23 @@ abstract class Node {
 
   Node? parent;
 
+  late String? key = json[JsonKey.key];
+
   /// 这是一个GlobalKey，需要在[WidgetNode.build]或者[InlineNode.buildSpan]生成
   /// widget时将key指定为这个值
   ///
   /// key可以为null，为null时表示没有对应的StatefulWidget，不具备更新的能力。
   /// *如果不为null，则必须要有与之对应的StatefulWidget*
-  late NodeKey<NodeWidgetState>? key = NodeKey(value: json[JsonKey.key]);
+  late NodeKey<NodeWidgetState>? nodeKey = NodeKey(value: key);
 
   /// 当key是null时，通过parent更新，例如TextNode，它的key为null，它不对应任何的
   /// StatefulWidget，而是对应TextSpan，因此不具备json更新之后更新ui的能力，所以需要通过
   /// parent更新widget
   void update() {
-    if (key == null) {
+    if (nodeKey == null) {
       parent?.update();
     } else {
-      var state = key?.currentState;
+      var state = nodeKey?.currentState;
       if (state is NodeWidgetState) {
         state.update();
       }
@@ -82,7 +84,7 @@ abstract class ElementNode extends Node {
   ElementNode(super.json);
 
   @override
-  NodeKey<NodeWidgetState<NodeWidget<Node>>> get key => super.key!;
+  NodeKey<NodeWidgetState<NodeWidget<Node>>> get nodeKey => super.nodeKey!;
 
   List<Node>? _children;
 

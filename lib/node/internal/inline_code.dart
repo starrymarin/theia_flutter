@@ -10,7 +10,7 @@ class InlineCodeNode extends InlineNode {
   @override
   NodeWidgetSpan buildSpan({TextStyle? textStyle}) {
     return NodeWidgetSpan(
-      child: InlineCodeNodeWidget(key: key, node: this),
+      child: InlineCodeNodeWidget(key: nodeKey, node: this),
       baseline: TextBaseline.alphabetic,
       alignment: PlaceholderAlignment.baseline,
     );

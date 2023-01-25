@@ -10,7 +10,7 @@ class LinkNode extends InlineNode {
   @override
   NodeWidgetSpan buildSpan({TextStyle? textStyle}) {
     return NodeWidgetSpan(
-      child: LinkNodeWidget(key: key, node: this),
+      child: LinkNodeWidget(key: nodeKey, node: this),
     );
   }
 }

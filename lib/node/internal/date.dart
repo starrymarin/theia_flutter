@@ -10,7 +10,7 @@ class DateNode extends InlineNode {
   NodeWidgetSpan buildSpan({TextStyle? textStyle}) {
     return NodeWidgetSpan(
       alignment: PlaceholderAlignment.middle,
-      child: DateNodeWidget(key: key, node: this),
+      child: DateNodeWidget(key: nodeKey, node: this),
     );
   }
 }

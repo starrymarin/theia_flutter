@@ -14,7 +14,7 @@ class LabelNode extends InlineNode {
   NodeWidgetSpan buildSpan({TextStyle? textStyle}) {
     return NodeWidgetSpan(
       alignment: PlaceholderAlignment.middle,
-      child: LabelNodeWidget(key: key, node: this),
+      child: LabelNodeWidget(key: nodeKey, node: this),
     );
   }
 }

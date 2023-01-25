@@ -8,7 +8,7 @@ class CheckItemNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return CheckItemNodeWidget(key: key, node: this);
+    return CheckItemNodeWidget(key: nodeKey, node: this);
   }
 }
 

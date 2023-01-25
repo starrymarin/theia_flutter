@@ -12,7 +12,7 @@ abstract class ListNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return ListNodeWidget(key: key, node: this);
+    return ListNodeWidget(key: nodeKey, node: this);
   }
 }
 
@@ -76,7 +76,7 @@ class ListItemNode extends BlockNode {
 
   @override
   NodeWidget<Node> build(BuildContext context) {
-    return ListItemNodeWidget(key: key, node: this);
+    return ListItemNodeWidget(key: nodeKey, node: this);
   }
 }
 

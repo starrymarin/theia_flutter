@@ -29,7 +29,7 @@ class HeadingNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return HeadingNodeWidget(key: key, node: this);
+    return HeadingNodeWidget(key: nodeKey, node: this);
   }
 }
 

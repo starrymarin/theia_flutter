@@ -10,7 +10,7 @@ class TextNode extends Node implements SpanNode {
   TextNode(super.json);
 
   @override
-  NodeKey<NodeWidgetState<NodeWidget<Node>>>? get key => null;
+  NodeKey<NodeWidgetState<NodeWidget<Node>>>? get nodeKey => null;
 
   String get text => json[JsonKey.text] ?? "";
 
@@ -81,13 +81,13 @@ class StyledTextTapRecognizer extends TapGestureRecognizer {
   final String? text;
 
   late final BuildContext? _context = () {
-    NodeKey? nodeKey = node.key;
+    NodeKey? nodeKey = node.nodeKey;
     while (nodeKey == null) {
       Node? parent = node.parent;
       if (parent == null) {
         return null;
       } else {
-        nodeKey = parent.key;
+        nodeKey = parent.nodeKey;
       }
     }
     return nodeKey.currentContext;

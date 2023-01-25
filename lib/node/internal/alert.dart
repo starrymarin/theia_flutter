@@ -57,7 +57,7 @@ class AlertNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return AlterNodeWidget(key: key, node: this);
+    return AlterNodeWidget(key: nodeKey, node: this);
   }
 }
 

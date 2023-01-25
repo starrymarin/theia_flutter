@@ -9,7 +9,7 @@ class BlockQuoteNode extends BlockNode {
 
   @override
   NodeWidget build(BuildContext context) {
-    return BlockQuoteNodeWidget(key: key, node: this);
+    return BlockQuoteNodeWidget(key: nodeKey, node: this);
   }
 }
 
