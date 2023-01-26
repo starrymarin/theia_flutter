@@ -88,6 +88,10 @@ class _Theia extends StatefulWidget {
 class TheiaState extends State<_Theia> {
   TheiaTextInputClient? _currentTextInputClient;
 
+  Iterable<BlockNode> get nodes => widget.document
+      .map((nodeJson) => nodeJson.toNode(widget.nodePlugins))
+      .whereType<BlockNode>();
+
   void useTextInputClient(TheiaTextInputClient textInputClient) {
     _currentTextInputClient?.closeConnection();
     _currentTextInputClient = textInputClient;
@@ -114,9 +118,7 @@ class TheiaState extends State<_Theia> {
                   height: 1.6,
                 ),
                 child: Column(
-                  children: widget.document
-                      .map((nodeJson) => nodeJson.toNode(widget.nodePlugins))
-                      .whereType<BlockNode>()
+                  children: nodes
                       .map((node) =>
                           Builder(builder: (context) => node.build(context)))
                       .whereType<Widget>()

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:theia_flutter/edit/theia_action.dart';
 import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/node/transform.dart';
 
@@ -78,6 +79,10 @@ abstract class Node {
       }
     }
   }
+
+  bool handleTheiaAction(TheiaAction action) {
+    return false;
+  }
 }
 
 abstract class ElementNode extends Node {
@@ -105,6 +110,32 @@ abstract class ElementNode extends Node {
         }
       }
     }
+  }
+
+  @override
+  bool handleTheiaAction(TheiaAction action) {
+    switch (action.type) {
+      case TheiaActionType.removeNode:
+        return _handleRemoveNode((action as RemoveNodeAction).node);
+    }
+    return super.handleTheiaAction(action);
+  }
+
+  bool _handleRemoveNode(Node node) {
+    bool success = false;
+    _children?.removeWhere((element) {
+      if (element == node) {
+        success = true;
+        return true;
+      } else {
+        return false;
+      }
+    });
+    if (success) {
+      json[JsonKey.children] = _children?.map((e) => e.json);
+    }
+    update();
+    return success;
   }
 }
 

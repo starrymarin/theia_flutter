@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:theia_flutter/constants.dart';
+import 'package:theia_flutter/edit/theia_action.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/node/text.dart';
 import 'package:theia_flutter/theia.dart';
 
 class InlineCodeNode extends InlineNode {
   InlineCodeNode(super.json);
+
+  @override
+  bool handleTheiaAction(TheiaAction action) {
+    switch (action.type) {
+      case TheiaActionType.removeNode:
+        return parent?.handleTheiaAction(RemoveNodeAction(node: this)) ?? false;
+    }
+    return super.handleTheiaAction(action);
+  }
 
   @override
   NodeWidgetSpan buildSpan({TextStyle? textStyle}) {

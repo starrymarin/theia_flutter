@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:theia_flutter/edit/input_action.dart';
 import 'package:theia_flutter/edit/text_input_client.dart';
+import 'package:theia_flutter/edit/theia_action.dart';
 import 'package:theia_flutter/node/json.dart';
 import 'package:theia_flutter/node/node.dart';
 import 'package:theia_flutter/theia.dart';
@@ -52,6 +54,15 @@ class TextNode extends Node implements SpanNode {
       text: text,
       style: style,
     );
+  }
+
+  @override
+  bool handleTheiaAction(TheiaAction action) {
+    switch (action.type) {
+      case TheiaActionType.removeNode:
+        return parent?.handleTheiaAction(RemoveNodeAction(node: this)) ?? false;
+    }
+    return super.handleTheiaAction(action);
   }
 }
 
@@ -192,6 +203,15 @@ class StyledSpanInputClient extends TheiaTextInputClient {
   void update(TextEditingValue value) {
     node.json[JsonKey.text] = value.text;
     node.update();
+  }
+
+  @override
+  bool handleInputAction(InputAction action) {
+    switch (action.type) {
+      case InputActionType.delete:
+        return node.handleTheiaAction(RemoveNodeAction(node: node));
+    }
+    return super.handleInputAction(action);
   }
 }
 
