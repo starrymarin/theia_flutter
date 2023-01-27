@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/src/services/text_input.dart';
 import 'package:theia_flutter/edit/input_action.dart';
 import 'package:theia_flutter/edit/text_input_client.dart';
 import 'package:theia_flutter/edit/theia_action.dart';
@@ -32,6 +33,9 @@ class TextNode extends Node implements SpanNode {
 
   bool? get strikethrough => json[JsonKey.strikethrough];
 
+  /// 即使发生了rebuild，[RenderParagraph.text]也不一定使用最新的span，因为set
+  /// [RenderParagraph.text]的时候会执行对比，没有必要的更新则不会使用新的span，因此，
+  /// 有些需要更改的数据不建议构造时传递，如必须传递，必须保证旧span的数据最新
   @override
   StyledTextSpan buildSpan({TextStyle? textStyle}) {
     TextStyle newStyle = TextStyle(
@@ -80,19 +84,39 @@ class StyledTextSpan extends TextSpan {
     super.semanticsLabel,
     super.locale,
     super.spellOut,
-  }) : super(recognizer: StyledTextTapRecognizer(node: node, text: text));
+  }) : super(recognizer: StyledTextTapRecognizer()) {
+    StyledTextTapRecognizer tapRecognizer =
+        recognizer as StyledTextTapRecognizer;
+    tapRecognizer
+      ..node = node
+      ..text = text;
+  }
 
   final TextNode node;
+
+  @override
+  RenderComparison compareTo(InlineSpan other) {
+    RenderComparison result = super.compareTo(other);
+    if (other is StyledTextSpan &&
+        (result == RenderComparison.identical ||
+            result == RenderComparison.metadata)) {
+      StyledTextTapRecognizer tapRecognizer =
+          recognizer as StyledTextTapRecognizer;
+      StyledTextTapRecognizer otherTapRecognizer =
+          other.recognizer as StyledTextTapRecognizer;
+      tapRecognizer.node = otherTapRecognizer.node;
+      tapRecognizer.text = otherTapRecognizer.text;
+    }
+    return result;
+  }
 }
 
 class StyledTextTapRecognizer extends TapGestureRecognizer {
-  StyledTextTapRecognizer({required this.node, required this.text});
+  late TextNode node;
 
-  final TextNode node;
+  String? text;
 
-  final String? text;
-
-  late final BuildContext? _context = () {
+  BuildContext? get _context {
     NodeKey? nodeKey = node.nodeKey;
     while (nodeKey == null) {
       Node? parent = node.parent;
@@ -103,16 +127,16 @@ class StyledTextTapRecognizer extends TapGestureRecognizer {
       }
     }
     return nodeKey.currentContext;
-  }();
+  }
 
-  late final RenderParagraph? _paragraph = () {
+  RenderParagraph? get _paragraph {
     BuildContext? context = _context;
     if (context == null) {
       return null;
     } else {
       return _findRenderParagraph(context);
     }
-  }();
+  }
 
   TapDownDetails? _downDetails;
 
@@ -184,13 +208,15 @@ class StyledTextTapRecognizer extends TapGestureRecognizer {
     if (state == null) {
       return;
     }
-    state.useTextInputClient(StyledSpanInputClient(
-      TextEditingValue(
-        text: node.text,
-        selection: TextSelection.fromPosition(positionInSpan),
+    state.useTextInputClient(
+      StyledSpanInputClient(
+        TextEditingValue(
+          text: node.text,
+          selection: TextSelection.fromPosition(positionInSpan),
+        ),
+        node: node,
       ),
-      node: node,
-    ));
+    );
   }
 }
 
